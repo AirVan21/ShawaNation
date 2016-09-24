@@ -21,7 +21,7 @@ public class GeoSearcher {
         try {
             coordinates = requestPlaceCoordinates(location);
         } catch (Exception e) {
-            System.out.println("Couldn't process city: " + location);
+            System.out.println("Couldn't process request: " + location);
             System.out.println(e.getMessage());
         }
 
@@ -29,10 +29,9 @@ public class GeoSearcher {
     }
 
     private static List<PlaceCoordinates> requestPlaceCoordinates(String location) throws Exception {
-        List<PlaceCoordinates> geoInformation = Arrays.asList(GeocodingApi
+        List<PlaceCoordinates> geoInformation = Arrays.stream(GeocodingApi
                 .geocode(geoContext, location)
                 .await())
-                .stream()
                 .map(PlaceCoordinates::new)
                 .collect(Collectors.toList());
 

@@ -3,14 +3,16 @@ package ru.spbau.database;
 import com.google.maps.model.AddressComponent;
 import com.google.maps.model.GeocodingResult;
 
-import java.util.Optional;
 
 /**
- * Created by airvan21 on 24.09.16.
+ * Class for storing
  */
 public class PlaceCoordinates {
-    private final static String countryId  = "COUNTRY";
-    private String country  = "";
+    private final static String countryId = "COUNTRY";
+    private final static String cityId    = "ADMINISTRATIVE_AREA_LEVEL_2";
+    private String formattedAddress       = "";
+    private String country                = "";
+    private String city                   = "";
     private double lat;
     private double lng;
 
@@ -19,14 +21,25 @@ public class PlaceCoordinates {
     public PlaceCoordinates(GeocodingResult location) {
         lat = location.geometry.location.lat;
         lng = location.geometry.location.lng;
-        country  = getParameterFromGeocoding(location, countryId);
+        country = getParameterFromGeocoding(location, countryId);
+        city    = getParameterFromGeocoding(location, cityId);
+        formattedAddress = location.formattedAddress;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
+        sb.append("Formatted address: ");
+        sb.append(formattedAddress);
+        sb.append("\n");
+
         sb.append("Country: ");
         sb.append(country);
+        sb.append("\n");
+
+        sb.append("City: ");
+        sb.append(city);
         sb.append("\n");
 
         sb.append("Lat: ");
