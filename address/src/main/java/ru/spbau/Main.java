@@ -2,6 +2,7 @@ package ru.spbau;
 
 import ru.spbau.database.PlaceCoordinates;
 import ru.spbau.googleAPI.GeoSearcher;
+import ru.spbau.utility.AddressSearcher;
 
 import java.util.List;
 
@@ -10,8 +11,27 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        final String input = "пр.Тореза д37, к2";
-        List<PlaceCoordinates> coordinates = GeoSearcher.getCityCoordinates(input);
-        coordinates.stream().forEach(item -> System.out.println(item));
+        final String input = "АДРЕС: Проспект Большевиков 32А. \n" +
+                "\n" +
+                "ОЦЕНКА: 8.5 из 10. \n" +
+                "\n" +
+                "Пишу сюда в первый раз. Листая новости в данной группе, увидел обзор шавермы на Дыбенко и решил създить, так как недалеко (Пр.Большевиков 32А). \n" +
+                "\n" +
+                "Приехал я туда, зашел. Довольно чистое и убранное заведение. Есть два отдельных стола и один \"общий\". Заказали мы с другом на тарелке(185руб) и попросили добавить все, что можно (на фото видно будет).\n" +
+                "\n" +
+                "Мастер работал в перчатках, в спец.форме, ухоженный вообще. Удивило то, что он жарил картошку перед нами, то есть все свежее и горячее, это порадовало.\n" +
+                "\n" +
+                "Итак, самое главное. Готовил он минут 10 две порции, мы не спешили, так что спокойно подождали, а когда приготовил, позвал забрать блюда. Мясо не лучшее, что я ел, оно классическое, чутка суховатое, но зато довольно большие кусочки, в целом недурно. Картошка отлично получилась. Овощи: помидоры с огурцами, витаминный салат, лук маринованный, огурцы соленные. И сверху мяса и картошки все полито соусом и кетчупом. Порция вышла добротная, мы оба наелись на голодный желудок.\n" +
+                "\n" +
+                "Если брать все, то это твердая 8.5. \n" +
+                "Советую место всем ценителям шавермы, так как есть, что оценить и попробовать.";
+
+        List<String> locations = AddressSearcher.getLocationFromText(input);
+        if (locations.isEmpty()) {
+            return;
+        }
+        
+        List<PlaceCoordinates> coordinates = GeoSearcher.getCityCoordinates(locations.get(0));
+        coordinates.forEach(System.out::println);
     }
 }
