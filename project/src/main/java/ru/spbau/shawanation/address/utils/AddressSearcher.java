@@ -1,4 +1,4 @@
-package ru.spbau.utility;
+package ru.spbau.shawanation.address.utils;
 
 import java.util.Arrays;
 import java.util.List;

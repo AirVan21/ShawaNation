@@ -1,4 +1,4 @@
-package ru.spbau.database;
+package ru.spbau.shawanation.address.database;
 
 import com.google.maps.model.AddressComponent;
 import com.google.maps.model.GeocodingResult;

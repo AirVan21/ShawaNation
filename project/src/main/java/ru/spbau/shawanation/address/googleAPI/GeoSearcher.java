@@ -1,8 +1,8 @@
-package ru.spbau.googleAPI;
+package ru.spbau.shawanation.address.googleAPI;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
-import ru.spbau.database.PlaceCoordinates;
+import ru.spbau.shawanation.address.database.PlaceCoordinates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
