@@ -5,7 +5,7 @@ import com.google.maps.model.GeocodingResult;
 
 
 /**
- * Class for storing
+ * PlaceCoordinates class for storing coordinates of a place
  */
 public class PlaceCoordinates {
     private final static String countryId = "COUNTRY";

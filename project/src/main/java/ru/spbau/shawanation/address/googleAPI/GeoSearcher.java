@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by airvan21 on 23.04.16.
+ * GeoSearcher is a class for converting string address to formatted address via GoogleAPI
  */
 public class GeoSearcher {
     private static final String GEO_API_CODE = "AIzaSyBPGuEnVZcQarLwzByVquiP4D-lmc2Q9OY";
