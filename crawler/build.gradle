@@ -5,6 +5,18 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+buildscript {
+    repositories {
+        maven {
+            url "https://jcenter.bintray.com"
+        }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
 ext {
     log4jVersion = '2.5'
     gsonVersion = '2.6.2'
@@ -24,6 +36,7 @@ repositories {
 }
 
 dependencies {
+    compile files('libs/sdk-0.2.1.jar')
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'com.google.code.gson', name: 'gson', version: gsonVersion
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
@@ -34,4 +47,12 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: httpCoreVersion
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpClientVersion
     compile group: 'org.apache.httpcomponents', name: 'httpmime', version: httpClientVersion
+}
+
+shadowJar {
+    manifest {
+        attributes(
+            'Main-Class': 'VKCrawler'
+        )
+    }
 }
