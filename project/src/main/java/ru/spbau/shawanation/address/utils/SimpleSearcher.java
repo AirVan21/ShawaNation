@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  */
 public class SimpleSearcher {
     public final static String ADDRESS_PATTERN = "адрес:";
-    public final static String MARK_PATTERN   = "оценка:";
+    public final static String MARK_PATTERN = "оценка:";
 
     public static List<String> getLocationFromText(String text) {
         return getLocationFromTextByPattern(text);
