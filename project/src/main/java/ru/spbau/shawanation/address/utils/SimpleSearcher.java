@@ -35,7 +35,8 @@ public class SimpleSearcher {
                 .filter(line -> line.contains(MARK_PATTERN))
                 .map(line -> line.substring(line.indexOf(":") + 1).trim()) // looking for "7 из 10" marks
                 .filter(line -> !line.isEmpty() && line.contains(" ") )    // filter non-patter strings
-                .map(line -> line.substring(0, line.indexOf(" ")))
+                .map(line -> line.substring(0, line.indexOf(" ")))         // get's first mark
+                .map(line -> line.replace(",", "."))                       // "." is used for double parse
                 .collect(Collectors.toList());
     }
 }
