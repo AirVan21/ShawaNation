@@ -12,19 +12,30 @@ public class SimpleSearcher {
     public final static String MARK_PATTERN = "оценка:";
 
     public static List<String> getLocationFromText(String text) {
-        return getInformationFromTextByPattern(text, ADDRESS_PATTERN);
+        return getLocationFromTextByPattern(text);
     }
 
     public static List<String> getMarkFromText(String text) {
-        return getInformationFromTextByPattern(text, MARK_PATTERN);
+        return getMarkFromTextByPattern(text);
     }
 
-    private static List<String> getInformationFromTextByPattern(String text, String pattern) {
+    private static List<String> getLocationFromTextByPattern(String text) {
         return Arrays
                 .stream(text.split("\\r?\\n")) // split on new line
                 .map(String::toLowerCase)
-                .filter(line -> line.contains(pattern))
+                .filter(line -> line.contains(ADDRESS_PATTERN.toLowerCase()))
                 .map(line -> line.substring(line.indexOf(":") + 1)) // get's only address from address string
+                .collect(Collectors.toList());
+    }
+
+    private static List<String> getMarkFromTextByPattern(String text) {
+        return Arrays
+                .stream(text.split("\\r?\\n")) // split on new line
+                .map(String::toLowerCase)
+                .filter(line -> line.contains(MARK_PATTERN))
+                .map(line -> line.substring(line.indexOf(":") + 1).trim()) // looking for "7 из 10" marks
+                .filter(line -> !line.isEmpty() && line.contains(" ") )    // filter non-patter strings
+                .map(line -> line.substring(0, line.indexOf(" ")))
                 .collect(Collectors.toList());
     }
 }
