@@ -12,14 +12,18 @@ public class SimpleSearcher {
     public final static String MARK_PATTERN = "оценка:";
 
     public static List<String> getLocationFromText(String text) {
-        return getLocationFromTextByPattern(text);
+        return getInformationFromTextByPattern(text, ADDRESS_PATTERN);
     }
 
-    private static List<String> getLocationFromTextByPattern(String text) {
+    public static List<String> getMarkFromText(String text) {
+        return getInformationFromTextByPattern(text, MARK_PATTERN);
+    }
+
+    private static List<String> getInformationFromTextByPattern(String text, String pattern) {
         return Arrays
                 .stream(text.split("\\r?\\n")) // split on new line
                 .map(String::toLowerCase)
-                .filter(line -> line.contains(ADDRESS_PATTERN))
+                .filter(line -> line.contains(pattern))
                 .map(line -> line.substring(line.indexOf(":") + 1)) // get's only address from address string
                 .collect(Collectors.toList());
     }
