@@ -1,4 +1,4 @@
-package ru.spbau.shawanation.address.database;
+package ru.spbau.shawanation.database;
 
 import com.google.maps.model.AddressComponent;
 import com.google.maps.model.GeocodingResult;
@@ -8,11 +8,11 @@ import com.google.maps.model.GeocodingResult;
  * PlaceCoordinates class for storing coordinates of a place
  */
 public class PlaceCoordinates {
-    private final static String countryId = "COUNTRY";
-    private final static String cityId    = "ADMINISTRATIVE_AREA_LEVEL_2";
-    private String formattedAddress       = "";
-    private String country                = "";
-    private String city                   = "";
+    private final static String COUNTRY_ID = "COUNTRY";
+    private final static String CITY_ID    = "ADMINISTRATIVE_AREA_LEVEL_2";
+    private String formattedAddress        = "";
+    private String country                 = "";
+    private String city                    = "";
     private double lat;
     private double lng;
 
@@ -21,8 +21,8 @@ public class PlaceCoordinates {
     public PlaceCoordinates(GeocodingResult location) {
         lat = location.geometry.location.lat;
         lng = location.geometry.location.lng;
-        country = getParameterFromGeocoding(location, countryId);
-        city    = getParameterFromGeocoding(location, cityId);
+        country = getParameterFromGeocoding(location, COUNTRY_ID);
+        city = getParameterFromGeocoding(location, CITY_ID);
         formattedAddress = location.formattedAddress;
     }
 
