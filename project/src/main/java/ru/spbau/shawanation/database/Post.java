@@ -57,6 +57,10 @@ public class Post {
         return sb.toString();
     }
 
+    public boolean isValid() {
+        return coordinates != null && !text.isEmpty();
+    }
+
     private void updatePlaceCoordinates(String text) {
         final List<String> locations = SimpleSearcher.getLocationFromText(text);
         final int FIRST = 0;
