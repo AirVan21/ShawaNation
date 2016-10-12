@@ -46,7 +46,7 @@ public class PlaceCoordinates {
         sb.append(lat);
         sb.append("\n");
 
-        sb.append("Lan: ");
+        sb.append("Lon: ");
         sb.append(lng);
         sb.append("\n");
 
