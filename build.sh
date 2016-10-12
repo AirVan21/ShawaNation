@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ ! -d vk-java-sdk ]; then
   git clone https://github.com/VKCOM/vk-java-sdk.git
   # apply bugfix-patch to vk api schema
