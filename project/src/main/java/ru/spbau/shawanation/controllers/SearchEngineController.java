@@ -6,6 +6,7 @@ import ru.spbau.shawanation.database.PlaceCoordinates;
 import ru.spbau.shawanation.services.SearchEngineService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class SearchEngineController {
@@ -15,8 +16,10 @@ public class SearchEngineController {
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
-    String getClosest(@RequestBody String queryText) {
+    String getClosest(@RequestParam(value = "text") String queryText) {
         List<PlaceCoordinates> coordinates = searchEngineService.getClosest(queryText, 10);
-        return "";
+        return coordinates.stream()
+                .map(c -> String.format("%s: %s,%s\n", c.getFormattedAddress(), c.getLat(), c.getLng()))
+                .collect(Collectors.joining());
     }
 }

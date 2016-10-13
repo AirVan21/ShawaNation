@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
-import ru.spbau.shawanation.database.PlaceCoordinates;
+import org.springframework.context.annotation.PropertySource;
 import ru.spbau.shawanation.services.SearchEngineService;
-
-import java.util.List;
 
 
 /**
  * Main class
  */
+@PropertySource("classpath:application.properties")
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
@@ -21,7 +20,12 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        List<PlaceCoordinates> coordinatesList = searchEngineService.getClosest("ул. Хлопина, д.8, корпус 3, лит. А", 10);
+        if (args.length == 0) {
+            System.out.println("Not enough arguments - provide search query, please");
+            return;
+        }
+
+        searchEngineService.getClosest(args[0], 10);
     }
 
     public static void main(String[] args) {
