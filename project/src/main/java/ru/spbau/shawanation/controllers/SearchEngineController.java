@@ -14,6 +14,7 @@ public class SearchEngineController {
     @Autowired
     private SearchEngineService searchEngineService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
     String getClosest(@RequestParam(value = "text") String queryText) {
