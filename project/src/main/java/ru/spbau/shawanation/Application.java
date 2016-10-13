@@ -4,7 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
+import ru.spbau.shawanation.crawler.Crawler;
+import ru.spbau.shawanation.database.DataBase;
+import ru.spbau.shawanation.database.Post;
 import ru.spbau.shawanation.services.SearchEngineService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Main class
