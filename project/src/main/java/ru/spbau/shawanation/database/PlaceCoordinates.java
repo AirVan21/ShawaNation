@@ -53,6 +53,26 @@ public class PlaceCoordinates {
         return sb.toString();
     }
 
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
     /**
      * Calculate distance between two points in latitude and longitude taking
      * into account height difference.
