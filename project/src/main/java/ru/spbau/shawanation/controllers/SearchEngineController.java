@@ -19,7 +19,7 @@ public class SearchEngineController {
     String getClosest(@RequestParam(value = "text") String queryText) {
         List<PlaceCoordinates> coordinates = searchEngineService.getClosest(queryText, 10);
         return coordinates.stream()
-                .map(c -> String.format("%s: %s,%s\n", c.getFormattedAddress(), c.getLat(), c.getLng()))
+                .map(c -> String.format("%s: %s,%s<br>", c.getFormattedAddress(), c.getLat(), c.getLng()))
                 .collect(Collectors.joining());
     }
 }
