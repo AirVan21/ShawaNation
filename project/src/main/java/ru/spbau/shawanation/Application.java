@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.PropertySource;
 import ru.spbau.shawanation.services.SearchEngineService;
 
+import java.util.stream.Collectors;
+
 
 /**
  * Main class
@@ -24,8 +26,9 @@ public class Application implements CommandLineRunner {
             System.out.println("Not enough arguments - provide search query, please");
             return;
         }
-
-        searchEngineService.getClosest(args[0], 10);
+        searchEngineService.getClosest(args[0], 10).stream()
+                .map(c -> String.format("%s: %s,%s\n", c.getFormattedAddress(), c.getLat(), c.getLng()))
+                .forEach(System.out::println);
     }
 
     public static void main(String[] args) {
