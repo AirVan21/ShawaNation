@@ -1,5 +1,6 @@
 package ru.spbau.shawanation.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.spbau.shawanation.address.googleAPI.GeoSearcher;
 import ru.spbau.shawanation.database.DataBase;
@@ -14,7 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class SearchEngineService {
     private static final String databaseName = "Posts";
-    private final DataBase db = new DataBase(databaseName);
+    
+    @Autowired
+    private DataBase db;
 
     public List<PlaceCoordinates> getClosest(String address, int count) {
         final List<PlaceCoordinates> current = GeoSearcher.getCityCoordinates(address);
