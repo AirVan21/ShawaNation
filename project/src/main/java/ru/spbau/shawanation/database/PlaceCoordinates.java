@@ -53,6 +53,24 @@ public class PlaceCoordinates {
         return sb.toString();
     }
 
+    /**
+     * Calculate distance between two points in latitude and longitude taking
+     * into account height difference.
+     */
+    public Double getDistance(double inputLat, double inputLng) {
+        // Radius of the earth
+        final int R = 6371;
+        final Double latDistance = Math.toRadians(lat - inputLat);
+        final Double lonDistance = Math.toRadians(lng - inputLng);
+        final Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat)) * Math.cos(Math.toRadians(inputLat))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        final Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c * 1000;
+    }
+
+
     private String getParameterFromGeocoding(GeocodingResult location, String parameter) {
         for (AddressComponent item : location.addressComponents) {
             if (item.types.length > 0 && item.types[0].name().equals(parameter)) {

@@ -1,7 +1,6 @@
 package ru.spbau.shawanation.database;
 
 import com.mongodb.MongoClient;
-import javafx.geometry.Pos;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 

@@ -22,7 +22,7 @@ public class Crawler {
     private static int GROUP_ID = -94119361;
 
     /**
-     * Gets vk posts sending VkApi query
+     * Gets vk posts sending VkApi getClosest
      */
     public static List<Post> getVkPosts() {
         final TransportClient transportClient = HttpTransportClient.getInstance();
