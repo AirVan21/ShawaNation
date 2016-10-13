@@ -1,0 +1,3514 @@
+From e63f3eb5d637e412036730899436e2067490a0c9 Mon Sep 17 00:00:00 2001
+From: dsavvinov <dsavvinov@gmail.com>
+Date: Thu, 6 Oct 2016 18:51:37 +0300
+Subject: [PATCH 1/1] patched
+
+---
+ examples/build.gradle                              |   3 -
+ examples/hello-bot/build.gradle                    |  47 -----
+ .../api/examples/hellobot/BotRequestHandler.java   |  36 ----
+ .../java/com/vk/api/examples/hellobot/Main.java    |  65 ------
+ .../vk/api/examples/hellobot/RequestHandler.java   |  68 ------
+ .../hello-bot/src/main/resources/config.properties |   3 -
+ examples/hello-bot/src/main/resources/log4j2.xml   |  13 --
+ examples/youtrack-bot/build.gradle                 |  74 -------
+ .../com/vk/api/examples/youtrack/Application.java  | 232 ---------------------
+ .../api/examples/youtrack/api/actions/BaseApi.java |  18 --
+ .../examples/youtrack/api/actions/IssuesApi.java   |  48 -----
+ .../examples/youtrack/api/actions/ProjectApi.java  |  18 --
+ .../examples/youtrack/api/actions/UsersApi.java    |  13 --
+ .../api/examples/youtrack/api/client/SslUtils.java |  26 ---
+ .../youtrack/api/client/YouTrackClient.java        | 219 -------------------
+ .../youtrack/api/client/YouTrackResponse.java      |  43 ----
+ .../youtrack/api/objects/issues/Issue.java         |  54 -----
+ .../youtrack/api/objects/issues/IssueChange.java   |  25 ---
+ .../api/objects/issues/IssueChangeField.java       |  55 -----
+ .../api/objects/issues/IssueChangeList.java        |  26 ---
+ .../youtrack/api/objects/issues/IssueField.java    |  44 ----
+ .../api/objects/issues/IssueFieldValue.java        |  37 ----
+ .../youtrack/api/objects/issues/IssueList.java     |  26 ---
+ .../api/objects/projects/AdminProjectList.java     |  46 ----
+ .../youtrack/api/objects/projects/ProjectList.java |  57 -----
+ .../examples/youtrack/api/objects/users/User.java  |  37 ----
+ .../youtrack/callback/CallbackApiHandler.java      | 102 ---------
+ .../callback/commands/CreateTaskCommand.java       |  46 ----
+ .../callback/commands/GetConfigCommand.java        |  46 ----
+ .../youtrack/callback/commands/HelpCommand.java    |  33 ---
+ .../youtrack/callback/commands/LoginCommand.java   |  46 ----
+ .../youtrack/callback/commands/LogoutCommand.java  |  29 ---
+ .../callback/commands/MineTasksCommand.java        |  68 ------
+ .../callback/commands/SearchTasksCommand.java      |  68 ------
+ .../callback/commands/SetConfigCommand.java        |  59 ------
+ .../youtrack/callback/commands/UptimeCommand.java  |  39 ----
+ .../youtrack/callback/commands/VkCommand.java      |  32 ---
+ .../com/vk/api/examples/youtrack/jobs/Job.java     |   9 -
+ .../examples/youtrack/jobs/MembersUpdateJob.java   |  64 ------
+ .../com/vk/api/examples/youtrack/jobs/NewsJob.java |  52 -----
+ .../youtrack/jobs/NotifyIssueChangesJob.java       | 179 ----------------
+ .../youtrack/server/CallbackRequestHandler.java    |  46 ----
+ .../server/ConfirmationCodeRequestHandler.java     |  58 ------
+ .../api/examples/youtrack/storage/DataStorage.java |  83 --------
+ .../youtrack/storage/IssueNotifications.java       |  44 ----
+ .../api/examples/youtrack/storage/LangStorage.java |  66 ------
+ .../examples/youtrack/storage/MembersStorage.java  | 102 ---------
+ .../api/examples/youtrack/storage/Statistic.java   |  36 ----
+ .../youtrack/storage/users/SettingName.java        |  30 ---
+ .../youtrack/storage/users/SettingValue.java       |  30 ---
+ .../youtrack/storage/users/YouTrackUser.java       |  45 ----
+ .../storage/users/YouTrackUsersStorage.java        | 188 -----------------
+ .../src/main/resources/config.properties           |  21 --
+ .../src/main/resources/lang.properties             |   1 -
+ .../vk/api/examples/youtrack/ParseJsonTest.java    |  29 ---
+ examples/youtrack-bot/template.properties          |  20 --
+ .../java/com/vk/api/sdk/objects/base/Place.java    |   8 +-
+ 57 files changed, 4 insertions(+), 3008 deletions(-)
+ delete mode 100644 examples/build.gradle
+ delete mode 100644 examples/hello-bot/build.gradle
+ delete mode 100644 examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/BotRequestHandler.java
+ delete mode 100644 examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/Main.java
+ delete mode 100644 examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/RequestHandler.java
+ delete mode 100644 examples/hello-bot/src/main/resources/config.properties
+ delete mode 100644 examples/hello-bot/src/main/resources/log4j2.xml
+ delete mode 100644 examples/youtrack-bot/build.gradle
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/Application.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/BaseApi.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/IssuesApi.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/ProjectApi.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/UsersApi.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/SslUtils.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackClient.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackResponse.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/Issue.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChange.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeField.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeList.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueField.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueFieldValue.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueList.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/AdminProjectList.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/ProjectList.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/users/User.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/CallbackApiHandler.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/CreateTaskCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/GetConfigCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/HelpCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LoginCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LogoutCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/MineTasksCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SearchTasksCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SetConfigCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/UptimeCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/VkCommand.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/Job.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/MembersUpdateJob.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NewsJob.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NotifyIssueChangesJob.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/CallbackRequestHandler.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/ConfirmationCodeRequestHandler.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/DataStorage.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/IssueNotifications.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/LangStorage.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/MembersStorage.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/Statistic.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingName.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingValue.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUser.java
+ delete mode 100644 examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUsersStorage.java
+ delete mode 100644 examples/youtrack-bot/src/main/resources/config.properties
+ delete mode 100644 examples/youtrack-bot/src/main/resources/lang.properties
+ delete mode 100644 examples/youtrack-bot/src/test/java/com/vk/api/examples/youtrack/ParseJsonTest.java
+ delete mode 100644 examples/youtrack-bot/template.properties
+
+diff --git a/examples/build.gradle b/examples/build.gradle
+deleted file mode 100644
+index 7192b5b..0000000
+--- a/examples/build.gradle
++++ /dev/null
+@@ -1,3 +0,0 @@
+-subprojects {
+-    group 'com.vk.api.examples'
+-}
+\ No newline at end of file
+diff --git a/examples/hello-bot/build.gradle b/examples/hello-bot/build.gradle
+deleted file mode 100644
+index 7bcdad5..0000000
+--- a/examples/hello-bot/build.gradle
++++ /dev/null
+@@ -1,47 +0,0 @@
+-import org.apache.tools.ant.filters.ReplaceTokens
+-
+-apply plugin: 'application'
+-
+-mainClassName = "com.vk.api.examples.hellobot.Main"
+-
+-repositories {
+-    mavenCentral()
+-}
+-
+-
+-ext {
+-    log4jVersion = '2.5'
+-    gsonVersion = '2.6.2'
+-    httpCoreVersion = '4.4.4'
+-    httpClientVersion = '4.5.2'
+-    jettyVersion = '9.3.11.v20160721'
+-    jsonVersion = '20160810'
+-
+-    groupId = '1';
+-    token = 'dummy_token';
+-    confirmationCode = 'dummy_confirmation_code';
+-}
+-
+-dependencies {
+-    compile group: 'com.google.code.gson', name: 'gson', version: gsonVersion
+-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
+-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: httpCoreVersion
+-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpClientVersion
+-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: httpClientVersion
+-    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: jettyVersion
+-    compile group: 'org.json', name: 'json', version: jsonVersion
+-    compile project(":sdk")
+-}
+-
+-processResources {
+-    eachFile { details ->
+-        if (details.name.endsWith('.properties')) {
+-            details.filter(ReplaceTokens, tokens: [
+-                    'groupId'         : groupId,
+-                    'token'           : token,
+-                    'confirmationCode': confirmationCode,
+-            ])
+-        }
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/BotRequestHandler.java b/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/BotRequestHandler.java
+deleted file mode 100644
+index bc61e02..0000000
+--- a/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/BotRequestHandler.java
++++ /dev/null
+@@ -1,36 +0,0 @@
+-package com.vk.api.examples.hellobot;
+-
+-import com.vk.api.sdk.client.VkApiClient;
+-import com.vk.api.sdk.client.actors.GroupActor;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.util.Random;
+-
+-class BotRequestHandler {
+-
+-    private static final Logger LOG = LogManager.getLogger(BotRequestHandler.class);
+-
+-    private final VkApiClient apiClient;
+-
+-    private final GroupActor actor;
+-    private final Random random = new Random();
+-
+-    BotRequestHandler(VkApiClient apiClient, GroupActor actor) {
+-        this.apiClient = apiClient;
+-        this.actor = actor;
+-    }
+-
+-    void handle(int userId) {
+-        try {
+-            String name = apiClient.users().get().userIds(String.valueOf(userId)).execute().get(0).getFirstName();
+-            apiClient.messages().send(actor).message("Hello, " + name + "!").userId(userId).randomId(random.nextInt()).execute();
+-        } catch (ApiException e) {
+-            LOG.error("INVALID REQUEST", e);
+-        } catch (ClientException e) {
+-            LOG.error("NETWORK ERROR", e);
+-        }
+-    }
+-}
+diff --git a/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/Main.java b/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/Main.java
+deleted file mode 100644
+index 603d784..0000000
+--- a/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/Main.java
++++ /dev/null
+@@ -1,65 +0,0 @@
+-package com.vk.api.examples.hellobot;
+-
+-import com.vk.api.sdk.client.VkApiClient;
+-import com.vk.api.sdk.client.actors.GroupActor;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-import com.vk.api.sdk.httpclient.HttpTransportClient;
+-import org.eclipse.jetty.server.Server;
+-
+-import java.io.FileNotFoundException;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.util.Properties;
+-
+-public class Main {
+-    private final static String PROPERTIES_FILE = "config.properties";
+-
+-    public static void main(String[] args) throws Exception {
+-        Properties properties = readProperties();
+-
+-        HttpTransportClient client = new HttpTransportClient();
+-        VkApiClient apiClient = new VkApiClient(client);
+-
+-        GroupActor actor = initVkApi(apiClient, readProperties());
+-        BotRequestHandler botHandler = new BotRequestHandler(apiClient, actor);
+-
+-        Server server = new Server(8080);
+-
+-        server.setHandler(new RequestHandler(botHandler, properties.getProperty("confirmationCode")));
+-
+-        server.start();
+-        server.join();
+-    }
+-
+-    private static GroupActor initVkApi(VkApiClient apiClient, Properties properties) {
+-        int groupId = Integer.parseInt(properties.getProperty("groupId"));
+-        String token = properties.getProperty("token");
+-        if (groupId == 0 || token == null) throw new RuntimeException("Params are not set");
+-        GroupActor actor = new GroupActor(groupId, token);
+-
+-        try {
+-            apiClient.groups().setCallbackSettings(actor, actor.getGroupId()).messageNew(true).execute();
+-        } catch (ApiException e) {
+-            throw new RuntimeException("Api error during init", e);
+-        } catch (ClientException e) {
+-            throw new RuntimeException("Client error during init", e);
+-        }
+-
+-        return actor;
+-    }
+-
+-    private static Properties readProperties() throws FileNotFoundException {
+-        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE);
+-        if (inputStream == null)
+-            throw new FileNotFoundException("property file '" + PROPERTIES_FILE + "' not found in the classpath");
+-
+-        try {
+-            Properties properties = new Properties();
+-            properties.load(inputStream);
+-            return properties;
+-        } catch (IOException e) {
+-            throw new RuntimeException("Incorrect properties file");
+-        }
+-    }
+-}
+diff --git a/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/RequestHandler.java b/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/RequestHandler.java
+deleted file mode 100644
+index 4fda330..0000000
+--- a/examples/hello-bot/src/main/java/com/vk/api/examples/hellobot/RequestHandler.java
++++ /dev/null
+@@ -1,68 +0,0 @@
+-package com.vk.api.examples.hellobot;
+-
+-import org.eclipse.jetty.server.Request;
+-import org.eclipse.jetty.server.handler.AbstractHandler;
+-import org.json.JSONException;
+-import org.json.JSONObject;
+-
+-import javax.servlet.ServletException;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import java.io.IOException;
+-import java.util.stream.Collectors;
+-
+-class RequestHandler extends AbstractHandler {
+-
+-    private final static String CONFIRMATION_TYPE = "confirmation";
+-    private final static String MESSAGE_TYPE = "message_new";
+-    private final static String OK_BODY = "ok";
+-
+-    private final BotRequestHandler botRequestHandler;
+-    private final String confirmationCode;
+-
+-    RequestHandler(BotRequestHandler handler, String confirmationCode) {
+-        this.botRequestHandler = handler;
+-        this.confirmationCode = confirmationCode;
+-    }
+-
+-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+-            throws IOException, ServletException {
+-
+-        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+-            throw new ServletException("This method is unsupported");
+-        }
+-
+-        String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+-
+-        try {
+-            JSONObject requestJson = new JSONObject(requestBody);
+-
+-            String type = requestJson.optString("type");
+-
+-            if (type == null || type.isEmpty()) throw new ServletException("No type in json");
+-
+-            final String responseBody;
+-            switch (type) {
+-                case CONFIRMATION_TYPE:
+-                    responseBody = confirmationCode;
+-                    break;
+-                case MESSAGE_TYPE:
+-                    JSONObject object = requestJson.getJSONObject("object");
+-                    int userId = object.getInt("user_id");
+-                    botRequestHandler.handle(userId);
+-                    responseBody = OK_BODY;
+-                    break;
+-                default:
+-                    responseBody = OK_BODY; // in case we get another event
+-                    break;
+-            }
+-
+-            response.setContentType("text/html;charset=utf-8");
+-            response.setStatus(HttpServletResponse.SC_OK);
+-            baseRequest.setHandled(true);
+-            response.getWriter().println(responseBody);
+-        } catch (JSONException e) {
+-            throw new ServletException("Incorrect json", e);
+-        }
+-    }
+-}
+diff --git a/examples/hello-bot/src/main/resources/config.properties b/examples/hello-bot/src/main/resources/config.properties
+deleted file mode 100644
+index db60f27..0000000
+--- a/examples/hello-bot/src/main/resources/config.properties
++++ /dev/null
+@@ -1,3 +0,0 @@
+-groupId=@groupId@
+-token=@token@
+-confirmationCode=@confirmationCode@
+\ No newline at end of file
+diff --git a/examples/hello-bot/src/main/resources/log4j2.xml b/examples/hello-bot/src/main/resources/log4j2.xml
+deleted file mode 100644
+index 47169f3..0000000
+--- a/examples/hello-bot/src/main/resources/log4j2.xml
++++ /dev/null
+@@ -1,13 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<Configuration status="INFO">
+-    <Appenders>
+-        <Console name="Console" target="SYSTEM_OUT">
+-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+-        </Console>
+-    </Appenders>
+-    <Loggers>
+-        <Root level="error">
+-            <AppenderRef ref="Console"/>
+-        </Root>
+-    </Loggers>
+-</Configuration>
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/build.gradle b/examples/youtrack-bot/build.gradle
+deleted file mode 100644
+index 529598b..0000000
+--- a/examples/youtrack-bot/build.gradle
++++ /dev/null
+@@ -1,74 +0,0 @@
+-import org.apache.tools.ant.filters.ReplaceTokens
+-
+-apply plugin: 'application'
+-
+-mainClassName = "com.vk.api.examples.youtrack.Application"
+-
+-repositories {
+-    mavenCentral()
+-}
+-
+-ext {
+-    log4jVersion = '2.5'
+-    gsonVersion = '2.6.2'
+-    guavaVersion = '19.0'
+-    commonsLangVersion = '3.4'
+-    commonsIOVersion = '2.4'
+-    commonsCLIVersion = '1.3.1'
+-    commonsCollectionsVersion = '4.1'
+-    httpCoreVersion = '4.4.4'
+-    httpClientVersion = '4.5.2'
+-    jettyVersion = '9.3.11.v20160721'
+-    testngVersion = '6.9.10'
+-}
+-
+-dependencies {
+-    compile project(":sdk")
+-
+-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.6.3'
+-    compile group: 'com.google.code.gson', name: 'gson', version: gsonVersion
+-    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
+-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+-    compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
+-    compile group: 'org.apache.commons', name: 'commons-collections4', version: commonsCollectionsVersion
+-    compile group: 'commons-io', name: 'commons-io', version: commonsIOVersion
+-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: httpCoreVersion
+-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpClientVersion
+-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: httpClientVersion
+-    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: jettyVersion
+-    testCompile group: 'org.testng', name: 'testng', version: testngVersion
+-}
+-
+-
+-processResources {
+-    eachFile { details ->
+-        if (details.name.endsWith('.properties')) {
+-            details.filter(ReplaceTokens, tokens: [
+-                    'yt.login'                : ytLogin,
+-                    'yt.password'             : ytPassword,
+-                    'yt.host'                 : ytHost,
+-
+-                    'http.keystore.type'      : httpKeyStoreType,
+-                    'http.keystore.path'      : httpKeyStorePath,
+-                    'http.keystore.password'  : httpKeyStorePassword,
+-                    'http.key.password'       : httpKeyPassword,
+-
+-                    'http.truststore.type'    : httpTrustStoreType,
+-                    'http.truststore.path'    : httpTrustStorePath,
+-                    'http.truststore.password': httpTrustStorePassword,
+-
+-
+-                    'vk.group.id'             : vkGroupId,
+-                    'vk.group.token'          : vkGroupToken,
+-
+-                    'server.host'             : serverHost,
+-                    'server.port'             : serverPort,
+-
+-                    'data.global'             : dataPath,
+-
+-                    'version'                 : version,
+-            ])
+-        }
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/Application.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/Application.java
+deleted file mode 100644
+index a13a4ef..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/Application.java
++++ /dev/null
+@@ -1,232 +0,0 @@
+-package com.vk.api.examples.youtrack;
+-
+-import com.google.gson.Gson;
+-import com.vk.api.examples.youtrack.api.client.YouTrackClient;
+-import com.vk.api.examples.youtrack.jobs.Job;
+-import com.vk.api.examples.youtrack.jobs.MembersUpdateJob;
+-import com.vk.api.examples.youtrack.jobs.NewsJob;
+-import com.vk.api.examples.youtrack.jobs.NotifyIssueChangesJob;
+-import com.vk.api.examples.youtrack.server.CallbackRequestHandler;
+-import com.vk.api.examples.youtrack.server.ConfirmationCodeRequestHandler;
+-import com.vk.api.examples.youtrack.storage.DataStorage;
+-import com.vk.api.examples.youtrack.storage.LangStorage;
+-import com.vk.api.examples.youtrack.storage.MembersStorage;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.client.TransportClient;
+-import com.vk.api.sdk.client.VkApiClient;
+-import com.vk.api.sdk.client.actors.Actor;
+-import com.vk.api.sdk.client.actors.GroupActor;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-import com.vk.api.sdk.httpclient.HttpTransportClient;
+-import com.vk.api.sdk.objects.groups.responses.GetCallbackConfirmationCodeResponse;
+-import com.vk.api.sdk.objects.groups.responses.GetCallbackServerSettingsResponse;
+-import com.vk.api.sdk.objects.groups.responses.SetCallbackServerResponse;
+-import com.vk.api.sdk.objects.groups.responses.SetCallbackServerResponseStateCode;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-import org.eclipse.jetty.server.Handler;
+-import org.eclipse.jetty.server.Server;
+-import org.eclipse.jetty.server.handler.HandlerCollection;
+-
+-import java.io.File;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.util.ArrayList;
+-import java.util.List;
+-import java.util.Properties;
+-import java.util.concurrent.TimeUnit;
+-
+-/**
+- * Created by Anton Tsivarev on 07.09.16.
+- */
+-public class Application {
+-
+-    private static final Logger LOG = LogManager.getLogger(Application.class);
+-
+-    private static GroupActor actor = null;
+-
+-    private static String version = "1.0";
+-
+-    private static VkApiClient vk;
+-
+-    private static YouTrackClient yt;
+-
+-    private static String ytHost;
+-
+-    private static List<Job> jobs = new ArrayList<>();
+-
+-    public static void main(String[] args) throws Exception {
+-        init();
+-
+-        run();
+-    }
+-
+-    private static void init() throws Exception {
+-        Properties properties = loadConfiguration();
+-
+-        version = properties.getProperty("version");
+-
+-        initClients(properties);
+-        initData(properties);
+-        initServer(properties);
+-        initJobs();
+-    }
+-
+-    private static void initServer(Properties properties) throws Exception {
+-        Integer port = Integer.valueOf(properties.getProperty("server.port"));
+-        String host = properties.getProperty("server.host");
+-        HandlerCollection handlers = new HandlerCollection();
+-
+-        ConfirmationCodeRequestHandler confirmationCodeRequestHandler = null;
+-
+-        GetCallbackServerSettingsResponse getCallbackServerSettingsResponse = vk.groups().getCallbackServerSettings(actor, actor.getGroupId()).execute();
+-        if (!getCallbackServerSettingsResponse.getServerUrl().equals(host)) {
+-            GetCallbackConfirmationCodeResponse getCallbackConfirmationCodeResponse = vk().groups().getCallbackConfirmationCode(actor, actor.getGroupId()).execute();
+-            String confirmationCode = getCallbackConfirmationCodeResponse.getCode();
+-            confirmationCodeRequestHandler = new ConfirmationCodeRequestHandler(confirmationCode);
+-        }
+-
+-        vk.groups().setCallbackSettings(actor, actor.getGroupId()).messageNew(true).execute();
+-
+-        CallbackRequestHandler callbackRequestHandler = new CallbackRequestHandler();
+-
+-        if (confirmationCodeRequestHandler != null) {
+-            handlers.setHandlers(new Handler[]{confirmationCodeRequestHandler, callbackRequestHandler});
+-        } else {
+-            handlers.setHandlers(new Handler[]{callbackRequestHandler}); //temp solution
+-        }
+-
+-        Server server = new Server(port);
+-        server.setHandler(handlers);
+-
+-        server.start();
+-
+-        for (int i = 0; i < 10; i++) {
+-            SetCallbackServerResponse response = vk.groups().setCallbackServer(actor, actor.getGroupId())
+-                    .serverUrl(host)
+-                    .execute();
+-
+-            if (response.getStateCode() == SetCallbackServerResponseStateCode.FAILED) {
+-                throw new IllegalStateException("Can't set callback server");
+-            }
+-
+-            if (response.getStateCode() == SetCallbackServerResponseStateCode.OK) {
+-                return;
+-            }
+-
+-            TimeUnit.SECONDS.sleep(1);
+-        }
+-
+-        server.join();
+-    }
+-
+-    private static void initClients(Properties properties) throws IOException {
+-        TransportClient client = HttpTransportClient.getInstance();
+-        vk = new VkApiClient(client, new Gson());
+-
+-        ytHost = properties.getProperty("yt.host");
+-        actor = new GroupActor(Integer.parseInt(properties.getProperty("vk.group.id")), properties.getProperty("vk.group.token"));
+-        yt = new YouTrackClient(ytHost,
+-                properties.getProperty("http.keystore.type"), properties.getProperty("http.keystore.path"), properties.getProperty("http.keystore.password"), properties.getProperty("http.key.password"),
+-                properties.getProperty("http.truststore.type"), properties.getProperty("http.truststore.path"), properties.getProperty("http.truststore.password"));
+-        yt.login(properties.getProperty("yt.login"), properties.getProperty("yt.password"));
+-
+-    }
+-
+-    private static void initJobs() throws ClientException, ApiException {
+-        jobs.add(new MembersUpdateJob());
+-        jobs.add(new NewsJob());
+-        jobs.add(new NotifyIssueChangesJob());
+-    }
+-
+-
+-    private static void initData(Properties properties) throws IOException {
+-        LangStorage.getInstance().load(Application.class.getResource("/lang.properties").getPath());
+-
+-        String dataDirectoryPath = properties.getProperty("data.global");
+-        File dataDirectory = new File(dataDirectoryPath);
+-        if (!dataDirectory.exists()) {
+-            LOG.warn("data directory not exist. Create " + dataDirectory.getPath());
+-            dataDirectory.mkdir();
+-        }
+-
+-        File dataPath = new File(dataDirectoryPath + "/data.properties");
+-        if (!dataPath.exists()) {
+-            LOG.warn("data.properties not exist. Create " + dataPath.getPath());
+-            dataPath.createNewFile();
+-        }
+-
+-        DataStorage dataStorage = DataStorage.getInstance();
+-        dataStorage.load(dataPath.getPath());
+-
+-        File usersPath = new File(dataDirectoryPath + "/users.csv");
+-        if (!usersPath.exists()) {
+-            LOG.warn("users.csv not exist. Create " + usersPath.getPath());
+-            usersPath.createNewFile();
+-        }
+-
+-        YouTrackUsersStorage youTrackUsersStorage = YouTrackUsersStorage.getInstance();
+-        youTrackUsersStorage.load(usersPath.getPath());
+-
+-        File membersPath = new File(dataDirectoryPath + "/members.csv");
+-        if (!membersPath.exists()) {
+-            LOG.warn("members.csv not exist. Create " + membersPath.getPath());
+-            membersPath.createNewFile();
+-        }
+-
+-        MembersStorage membersStorage = MembersStorage.getInstance();
+-        membersStorage.load(membersPath.getPath());
+-    }
+-
+-    private static void run() throws Exception {
+-        if (jobs.isEmpty()) {
+-            LOG.warn("No jobs configured. Exist");
+-            return;
+-        }
+-
+-        while (true) {
+-            for (Job job : jobs) {
+-                try {
+-                    job.doJob();
+-                } catch (Exception e) {
+-                    LOG.error("Something wrong", e);
+-                }
+-            }
+-
+-            TimeUnit.SECONDS.sleep(1);
+-        }
+-    }
+-
+-    private static Properties loadConfiguration() {
+-        Properties properties = new Properties();
+-        try (InputStream is = Application.class.getResourceAsStream("/config.properties")) {
+-            properties.load(is);
+-        } catch (IOException e) {
+-            LOG.error("Can't load properties file", e);
+-            throw new IllegalStateException(e);
+-        }
+-
+-        return properties;
+-    }
+-
+-    public static Actor actor() {
+-        return actor;
+-    }
+-
+-    public static VkApiClient vk() {
+-        return vk;
+-    }
+-
+-    public static YouTrackClient yt() {
+-        return yt;
+-    }
+-
+-    public static String ytHost() {
+-        return ytHost;
+-    }
+-
+-    public static String getVersion() {
+-        return version;
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/BaseApi.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/BaseApi.java
+deleted file mode 100644
+index cb6afdb..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/BaseApi.java
++++ /dev/null
+@@ -1,18 +0,0 @@
+-package com.vk.api.examples.youtrack.api.actions;
+-
+-import com.fasterxml.jackson.databind.DeserializationFeature;
+-import com.fasterxml.jackson.databind.ObjectMapper;
+-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+-import com.vk.api.examples.youtrack.api.client.YouTrackResponse;
+-
+-import java.io.IOException;
+-
+-public abstract class BaseApi {
+-
+-    public static <T> T fromXml(YouTrackResponse response, Class<T> tClass) throws IOException {
+-        ObjectMapper xmlMapper = new XmlMapper();
+-        xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+-        return xmlMapper.readValue(response.getContent(), tClass);
+-    }
+-
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/IssuesApi.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/IssuesApi.java
+deleted file mode 100644
+index c8093db..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/IssuesApi.java
++++ /dev/null
+@@ -1,48 +0,0 @@
+-package com.vk.api.examples.youtrack.api.actions;
+-
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.client.YouTrackResponse;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueChangeList;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueList;
+-
+-import java.io.IOException;
+-import java.util.HashMap;
+-import java.util.Map;
+-
+-public class IssuesApi extends BaseApi {
+-
+-    public static Issue getIssue(String issueId) throws IOException {
+-        return fromXml(Application.yt().get("/rest/issue/" + issueId), Issue.class);
+-    }
+-
+-    public static IssueList getIssues(String projectId, Integer count, long lastTime) throws IOException {
+-        Map<String, String> params = new HashMap<>();
+-        params.put("max", count.toString());
+-        params.put("updatedAfter", String.valueOf(lastTime));
+-        return fromXml(Application.yt().get("/rest/issue/byproject/" + projectId, params), IssueList.class);
+-    }
+-
+-    public static IssueList getIssues(String filter, Integer count) throws IOException {
+-        Map<String, String> params = new HashMap<>();
+-        params.put("max", count.toString());
+-        params.put("filter", filter);
+-        return fromXml(Application.yt().get("/rest/issue", params), IssueList.class);
+-    }
+-
+-    public static IssueChangeList getChanges(String issueId) throws IOException {
+-        return fromXml(Application.yt().get("/rest/issue/" + issueId + "/changes"), IssueChangeList.class);
+-    }
+-
+-    public static String create(String project, String summary, String description) throws IOException {
+-        Map<String, String> params = new HashMap<>();
+-        params.put("project", project);
+-        params.put("summary", summary);
+-        params.put("description", description);
+-
+-        YouTrackResponse response = Application.yt().put("/rest/issue", params);
+-        String issue = response.getHeaders().get("Location");
+-        return issue.substring(issue.indexOf("/rest/issue/") + "/rest/issue/".length());
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/ProjectApi.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/ProjectApi.java
+deleted file mode 100644
+index 95bb356..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/ProjectApi.java
++++ /dev/null
+@@ -1,18 +0,0 @@
+-package com.vk.api.examples.youtrack.api.actions;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.objects.projects.AdminProjectList;
+-import com.vk.api.examples.youtrack.api.objects.projects.ProjectList;
+-
+-import java.io.IOException;
+-
+-public class ProjectApi extends BaseApi {
+-
+-    public static AdminProjectList adminList() throws IOException {
+-        return fromXml(Application.yt().get("/rest/admin/project"), AdminProjectList.class);
+-    }
+-
+-    public static ProjectList list() throws IOException {
+-        return fromXml(Application.yt().get("/rest/project/all"), ProjectList.class);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/UsersApi.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/UsersApi.java
+deleted file mode 100644
+index 3eb3cf7..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/actions/UsersApi.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package com.vk.api.examples.youtrack.api.actions;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.objects.users.User;
+-
+-import java.io.IOException;
+-
+-public class UsersApi extends BaseApi {
+-
+-    public static User getUser(String login) throws IOException {
+-        return fromXml(Application.yt().get("/rest/user/" + login), User.class);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/SslUtils.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/SslUtils.java
+deleted file mode 100644
+index 30190d9..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/SslUtils.java
++++ /dev/null
+@@ -1,26 +0,0 @@
+-package com.vk.api.examples.youtrack.api.client;
+-
+-import java.io.FileInputStream;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.security.KeyStore;
+-import java.security.KeyStoreException;
+-import java.security.NoSuchAlgorithmException;
+-import java.security.cert.CertificateException;
+-
+-/**
+- * Created by Anton Tsivarev on 08.09.16.
+- */
+-public class SslUtils {
+-
+-    static KeyStore getStore(final String type, final String storeFileName, final String password) throws
+-            KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+-
+-        final KeyStore store = KeyStore.getInstance(type);
+-        try (InputStream inputStream = new FileInputStream(storeFileName)) {
+-            store.load(inputStream, password.toCharArray());
+-        }
+-
+-        return store;
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackClient.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackClient.java
+deleted file mode 100644
+index 249a706..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackClient.java
++++ /dev/null
+@@ -1,219 +0,0 @@
+-package com.vk.api.examples.youtrack.api.client;
+-
+-import org.apache.commons.collections4.MapUtils;
+-import org.apache.commons.io.IOUtils;
+-import org.apache.commons.lang3.StringUtils;
+-import org.apache.http.Header;
+-import org.apache.http.HttpResponse;
+-import org.apache.http.client.CookieStore;
+-import org.apache.http.client.config.CookieSpecs;
+-import org.apache.http.client.config.RequestConfig;
+-import org.apache.http.client.methods.HttpGet;
+-import org.apache.http.client.methods.HttpPost;
+-import org.apache.http.client.methods.HttpPut;
+-import org.apache.http.client.methods.HttpUriRequest;
+-import org.apache.http.config.Registry;
+-import org.apache.http.config.RegistryBuilder;
+-import org.apache.http.conn.socket.ConnectionSocketFactory;
+-import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
+-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+-import org.apache.http.entity.StringEntity;
+-import org.apache.http.impl.client.BasicCookieStore;
+-import org.apache.http.impl.client.CloseableHttpClient;
+-import org.apache.http.impl.client.HttpClients;
+-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+-import org.apache.http.ssl.SSLContextBuilder;
+-import org.apache.http.ssl.SSLContexts;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.io.UnsupportedEncodingException;
+-import java.net.URLEncoder;
+-import java.security.KeyManagementException;
+-import java.security.KeyStore;
+-import java.security.KeyStoreException;
+-import java.security.NoSuchAlgorithmException;
+-import java.security.UnrecoverableKeyException;
+-import java.security.cert.CertificateException;
+-import java.util.HashMap;
+-import java.util.Map;
+-
+-/**
+- * Created by tsivarev on 29.04.16.
+- */
+-public class YouTrackClient {
+-
+-    private static final Logger LOG = LogManager.getLogger(YouTrackClient.class);
+-
+-    private static final String ENCODING = "UTF-8";
+-    private static final int MAX_SIMULTANEOUS_CONNECTIONS = 300;
+-    private static final int FULL_CONNECTION_TIMEOUT_S = 60;
+-    private static final int CONNECTION_TIMEOUT_MS = 20_000;
+-    private static final int SOCKET_TIMEOUT_MS = FULL_CONNECTION_TIMEOUT_S * 1000;
+-    private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
+-
+-    private final CloseableHttpClient client;
+-
+-    private final String host;
+-
+-    public YouTrackClient(String host) {
+-        this(host, null, null, null, null, null, null, null);
+-    }
+-
+-    public YouTrackClient(String host, String keyStoreType, String keyStorePath, String keyStorePassword, String keyPassword,
+-                          String trustStoreType, String trustStorePath, String trustStorePassword) {
+-        this.host = host;
+-
+-        CookieStore cookieStore = new BasicCookieStore();
+-        RequestConfig requestConfig = RequestConfig.custom()
+-                .setSocketTimeout(SOCKET_TIMEOUT_MS)
+-                .setConnectTimeout(CONNECTION_TIMEOUT_MS)
+-                .setConnectionRequestTimeout(CONNECTION_TIMEOUT_MS)
+-                .setCookieSpec(CookieSpecs.STANDARD)
+-                .build();
+-
+-        LayeredConnectionSocketFactory sslFactory;
+-
+-        RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.<ConnectionSocketFactory>create()
+-                .register("http", new PlainConnectionSocketFactory());
+-
+-        if (host.contains("https://")) {
+-            try {
+-                sslFactory = initSslContext(keyStoreType, keyStorePath, keyStorePassword, keyPassword, trustStoreType, trustStorePath, trustStorePassword);
+-                registryBuilder.register("https", sslFactory);
+-            } catch (Exception e) {
+-                throw new IllegalStateException(e);
+-            }
+-        }
+-
+-        Registry<ConnectionSocketFactory> registry = registryBuilder.build();
+-
+-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry);
+-
+-        connectionManager.setMaxTotal(MAX_SIMULTANEOUS_CONNECTIONS);
+-        connectionManager.setDefaultMaxPerRoute(MAX_SIMULTANEOUS_CONNECTIONS);
+-
+-        client = HttpClients.custom()
+-                .setConnectionManager(connectionManager)
+-                .setDefaultRequestConfig(requestConfig)
+-                .setDefaultCookieStore(cookieStore)
+-                .build();
+-    }
+-
+-    private static Map<String, String> getResponseHeaders(Header[] headers) {
+-        Map<String, String> result = new HashMap<>();
+-        for (Header header : headers) {
+-            result.put(header.getName(), header.getValue());
+-        }
+-
+-        return result;
+-    }
+-
+-    private static String mapToGetString(Map<String, String> params) {
+-        StringBuilder builder = new StringBuilder();
+-
+-        for (Map.Entry<String, String> entry : params.entrySet()) {
+-            builder.append("&").append(entry.getKey()).append("=").append(entry.getValue() != null ? escape(entry.getValue()) : "");
+-        }
+-
+-        return builder.toString();
+-    }
+-
+-    private static String escape(String urlData) {
+-        try {
+-            return URLEncoder.encode(urlData, "UTF-8");
+-        } catch (UnsupportedEncodingException ex) {
+-            throw new RuntimeException(ex);
+-        }
+-    }
+-
+-    private SSLConnectionSocketFactory initSslContext(String keyStoreType, String keyStorePath, String keyStorePassword, String keyPassword,
+-                                                      String trustStoreType, String trustStorePath, String trustStorePassword)
+-            throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, UnrecoverableKeyException, KeyManagementException {
+-
+-        SSLContextBuilder sslContextBuilder = SSLContexts.custom();
+-
+-        if (StringUtils.isNoneBlank(keyStorePath)) {
+-            KeyStore keyStore = SslUtils.getStore(keyStoreType, keyStorePath, keyStorePassword);
+-            if (keyStore.size() == 0) {
+-                throw new IllegalStateException("Key store has no keys");
+-            }
+-
+-            sslContextBuilder.loadKeyMaterial(keyStore, keyPassword.toCharArray());
+-        }
+-
+-        if (StringUtils.isNoneBlank(trustStorePath)) {
+-            KeyStore trustStore = SslUtils.getStore(trustStoreType, trustStorePath, trustStorePassword);
+-            if (trustStore.size() == 0) {
+-                throw new IllegalStateException("Trust store has no keys");
+-            }
+-
+-            sslContextBuilder.loadTrustMaterial(trustStore, new TrustSelfSignedStrategy());
+-        }
+-
+-        return new SSLConnectionSocketFactory(
+-                sslContextBuilder.build(),
+-                SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+-    }
+-
+-    public void login(String username, String password) throws IOException {
+-        Map<String, String> params = new HashMap<>();
+-        params.put("login", username);
+-        params.put("password", password);
+-
+-        post("/rest/user/login", mapToGetString(params));
+-    }
+-
+-    public YouTrackResponse put(String path) throws IOException {
+-        return put(path, null);
+-    }
+-
+-    public YouTrackResponse put(String path, Map<String, String> params) throws IOException {
+-        String url = host + path;
+-        if (MapUtils.isNotEmpty(params)) {
+-            url += "?" + mapToGetString(params);
+-        }
+-
+-        HttpPut request = new HttpPut(url);
+-        request.setHeader("Content-Type", CONTENT_TYPE);
+-        return call(request);
+-    }
+-
+-    public YouTrackResponse get(String path) throws IOException {
+-        return get(path, null);
+-    }
+-
+-    public YouTrackResponse get(String path, Map<String, String> params) throws IOException {
+-        String url = host + path;
+-        if (MapUtils.isNotEmpty(params)) {
+-            url += "?" + mapToGetString(params);
+-        }
+-
+-        HttpGet request = new HttpGet(url);
+-        return call(request);
+-    }
+-
+-    public YouTrackResponse post(String path, String body) throws IOException {
+-        HttpPost request = new HttpPost(host + path);
+-        request.setHeader("Content-Type", CONTENT_TYPE);
+-        if (body != null) {
+-            request.setEntity(new StringEntity(body));
+-        }
+-
+-        return call(request);
+-    }
+-
+-    private YouTrackResponse call(HttpUriRequest request) throws IOException {
+-        HttpResponse response = client.execute(request);
+-        try (InputStream content = response.getEntity().getContent()) {
+-            String result = IOUtils.toString(content, ENCODING);
+-            LOG.info(request.getURI().toString() + " " + response.getStatusLine().getStatusCode());
+-            return new YouTrackResponse(response.getStatusLine().getStatusCode(), result, getResponseHeaders(response.getAllHeaders()));
+-        }
+-    }
+-
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackResponse.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackResponse.java
+deleted file mode 100644
+index 83835c8..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/client/YouTrackResponse.java
++++ /dev/null
+@@ -1,43 +0,0 @@
+-package com.vk.api.examples.youtrack.api.client;
+-
+-import java.util.Map;
+-
+-/**
+- * Created by Anton Tsivarev on 11.09.15.
+- */
+-public class YouTrackResponse {
+-
+-    private int statusCode;
+-
+-    private String content;
+-
+-    private Map<String, String> headers;
+-
+-    public YouTrackResponse(int statusCode, String content, Map<String, String> headers) {
+-        this.statusCode = statusCode;
+-        this.content = content;
+-        this.headers = headers;
+-    }
+-
+-    public int getStatusCode() {
+-        return statusCode;
+-    }
+-
+-    public String getContent() {
+-        return content;
+-    }
+-
+-    public Map<String, String> getHeaders() {
+-        return headers;
+-    }
+-
+-    @Override
+-    public String toString() {
+-        final StringBuilder sb = new StringBuilder("YouTrackResponse{");
+-        sb.append("statusCode=").append(statusCode);
+-        sb.append(", content='").append(content).append('\'');
+-        sb.append(", headers=").append(headers);
+-        sb.append('}');
+-        return sb.toString();
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/Issue.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/Issue.java
+deleted file mode 100644
+index 563443d..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/Issue.java
++++ /dev/null
+@@ -1,54 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-import com.google.common.base.Predicate;
+-import com.google.common.collect.Iterables;
+-
+-import javax.xml.bind.annotation.XmlAttribute;
+-import java.util.List;
+-
+-/**
+- * Created by Anton Tsivarev on 29.04.16.
+- */
+-public class Issue {
+-    @XmlAttribute
+-    private String id;
+-
+-    @JacksonXmlProperty(localName = "field")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<IssueField> fields;
+-
+-    public String getId() {
+-        return id;
+-    }
+-
+-    public void setId(String id) {
+-        this.id = id;
+-    }
+-
+-    public List<IssueField> getFields() {
+-        return fields;
+-    }
+-
+-    public void setFields(List<IssueField> fields) {
+-        this.fields = fields;
+-    }
+-
+-    public String getFieldValue(final String fieldName) {
+-        IssueField field = findIssueField(fieldName);
+-        if (field != null) {
+-            return field.getValue();
+-        }
+-        return null;
+-    }
+-
+-    public IssueField findIssueField(final String field) {
+-        return Iterables.tryFind(fields, new Predicate<IssueField>() {
+-            @Override
+-            public boolean apply(IssueField issueField) {
+-                return issueField.getName().equals(field);
+-            }
+-        }).orNull();
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChange.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChange.java
+deleted file mode 100644
+index fc97310..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChange.java
++++ /dev/null
+@@ -1,25 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-/**
+- * Created by Anton Tsivarev on 29.04.16.
+- */
+-public class IssueChange {
+-
+-    @JacksonXmlProperty(localName = "field")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<IssueChangeField> fields = new ArrayList<>();
+-
+-    public List<IssueChangeField> getFields() {
+-        return fields;
+-    }
+-
+-    public void setFields(List<IssueChangeField> fields) {
+-        this.fields = fields;
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeField.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeField.java
+deleted file mode 100644
+index 74a6210..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeField.java
++++ /dev/null
+@@ -1,55 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-
+-import javax.xml.bind.annotation.XmlAttribute;
+-
+-/**
+- * Created by Anton Tsivarev on 29.04.16.
+- */
+-public class IssueChangeField {
+-
+-    @XmlAttribute
+-    private String name;
+-
+-    @JacksonXmlProperty(localName = "oldValue")
+-    private String oldValue;
+-
+-    @JacksonXmlProperty(localName = "value")
+-    private String value;
+-
+-    @JacksonXmlProperty(localName = "newValue")
+-    private String newValue;
+-
+-    public String getName() {
+-        return name;
+-    }
+-
+-    public void setName(String name) {
+-        this.name = name;
+-    }
+-
+-    public String getOldValue() {
+-        return oldValue;
+-    }
+-
+-    public void setOldValue(String oldValue) {
+-        this.oldValue = oldValue;
+-    }
+-
+-    public String getNewValue() {
+-        return newValue;
+-    }
+-
+-    public void setNewValue(String newValue) {
+-        this.newValue = newValue;
+-    }
+-
+-    public String getValue() {
+-        return value;
+-    }
+-
+-    public void setValue(String value) {
+-        this.value = value;
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeList.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeList.java
+deleted file mode 100644
+index e83a5fe..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueChangeList.java
++++ /dev/null
+@@ -1,26 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+-
+-import javax.xml.bind.annotation.XmlSeeAlso;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-@JacksonXmlRootElement(localName = "issues")
+-@XmlSeeAlso({IssueChange.class, IssueChangeField.class})
+-public class IssueChangeList {
+-
+-    @JacksonXmlProperty(localName = "change")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<IssueChange> changes = new ArrayList<>();
+-
+-    public List<IssueChange> getChanges() {
+-        return changes;
+-    }
+-
+-    public void setChanges(List<IssueChange> changes) {
+-        this.changes = changes;
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueField.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueField.java
+deleted file mode 100644
+index 474d90a..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueField.java
++++ /dev/null
+@@ -1,44 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-
+-import javax.xml.bind.annotation.XmlAttribute;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class IssueField {
+-    @XmlAttribute
+-    private String name;
+-
+-    @JacksonXmlProperty(localName = "value")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<IssueFieldValue> values = new ArrayList<>();
+-
+-    public String getName() {
+-        return name;
+-    }
+-
+-    public void setName(String name) {
+-        this.name = name;
+-    }
+-
+-    public List<IssueFieldValue> getValues() {
+-        return values;
+-    }
+-
+-    public void setValues(List<IssueFieldValue> values) {
+-        this.values = values;
+-    }
+-
+-
+-    /**
+-     * @return first value of the values in this IssueField
+-     */
+-    public String getValue() {
+-        if (!values.isEmpty()) {
+-            return values.get(0).getText();
+-        }
+-        return null;
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueFieldValue.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueFieldValue.java
+deleted file mode 100644
+index dd562d0..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueFieldValue.java
++++ /dev/null
+@@ -1,37 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+-
+-import javax.xml.bind.annotation.XmlAttribute;
+-
+-public class IssueFieldValue {
+-
+-    @JacksonXmlText
+-    private String text;
+-
+-    @XmlAttribute
+-    private String url;
+-
+-    public IssueFieldValue(String text) {
+-        this.text = text;
+-    }
+-
+-    public IssueFieldValue() {
+-    }
+-
+-    public String getText() {
+-        return text;
+-    }
+-
+-    public void setText(String text) {
+-        this.text = text;
+-    }
+-
+-    public String getUrl() {
+-        return url;
+-    }
+-
+-    public void setUrl(String url) {
+-        this.url = url;
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueList.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueList.java
+deleted file mode 100644
+index abfab37..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/issues/IssueList.java
++++ /dev/null
+@@ -1,26 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.issues;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+-
+-import javax.xml.bind.annotation.XmlSeeAlso;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-@JacksonXmlRootElement(localName = "issues")
+-@XmlSeeAlso({Issue.class, IssueField.class, IssueFieldValue.class})
+-public class IssueList {
+-
+-    @JacksonXmlProperty(localName = "issue")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<Issue> issues = new ArrayList<>();
+-
+-    public List<Issue> getIssues() {
+-        return issues;
+-    }
+-
+-    public void setIssues(List<Issue> issues) {
+-        this.issues = issues;
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/AdminProjectList.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/AdminProjectList.java
+deleted file mode 100644
+index 209c3a0..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/AdminProjectList.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.projects;
+-
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueField;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueFieldValue;
+-
+-import javax.xml.bind.annotation.XmlAttribute;
+-import javax.xml.bind.annotation.XmlSeeAlso;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-@JacksonXmlRootElement(localName = "projects")
+-@XmlSeeAlso({Issue.class, IssueField.class, IssueFieldValue.class})
+-public class AdminProjectList {
+-
+-    @JacksonXmlProperty(localName = "project")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<AdminProject> projects = new ArrayList<>();
+-
+-
+-    public List<AdminProject> getProjects() {
+-        return projects;
+-    }
+-
+-    public void setProjects(List<AdminProject> projects) {
+-        this.projects = projects;
+-    }
+-
+-    public static class AdminProject {
+-        @XmlAttribute
+-        private String id;
+-
+-        public String getId() {
+-            return id;
+-        }
+-
+-        public void setId(String id) {
+-            this.id = id;
+-        }
+-    }
+-}
+-
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/ProjectList.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/ProjectList.java
+deleted file mode 100644
+index 932da0d..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/projects/ProjectList.java
++++ /dev/null
+@@ -1,57 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.projects;
+-
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueField;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueFieldValue;
+-
+-import javax.xml.bind.annotation.XmlAttribute;
+-import javax.xml.bind.annotation.XmlSeeAlso;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-@JacksonXmlRootElement(localName = "projects")
+-@XmlSeeAlso({Issue.class, IssueField.class, IssueFieldValue.class})
+-public class ProjectList {
+-
+-    @JacksonXmlProperty(localName = "project")
+-    @JacksonXmlElementWrapper(useWrapping = false)
+-    private List<Project> projects = new ArrayList<>();
+-
+-
+-    public List<Project> getProjects() {
+-        return projects;
+-    }
+-
+-    public void setProjects(List<Project> projects) {
+-        this.projects = projects;
+-    }
+-
+-    public static class Project {
+-        @XmlAttribute
+-        private String name;
+-
+-        @XmlAttribute
+-        private String shortName;
+-
+-        public String getName() {
+-            return name;
+-        }
+-
+-        public void setName(String name) {
+-            this.name = name;
+-        }
+-
+-        public String getShortName() {
+-            return shortName;
+-        }
+-
+-        public void setShortName(String shortName) {
+-            this.shortName = shortName;
+-        }
+-    }
+-}
+-
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/users/User.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/users/User.java
+deleted file mode 100644
+index 9df0707..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/api/objects/users/User.java
++++ /dev/null
+@@ -1,37 +0,0 @@
+-package com.vk.api.examples.youtrack.api.objects.users;
+-
+-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+-
+-public class User {
+-
+-    @JacksonXmlProperty
+-    private String fullName;
+-
+-    @JacksonXmlProperty
+-    private String email;
+-
+-    public String getFullName() {
+-        return fullName;
+-    }
+-
+-    public void setFullName(String fullName) {
+-        this.fullName = fullName;
+-    }
+-
+-    public String getEmail() {
+-        return email;
+-    }
+-
+-    public void setEmail(String email) {
+-        this.email = email;
+-    }
+-
+-    @Override
+-    public String toString() {
+-        final StringBuilder sb = new StringBuilder("User{");
+-        sb.append("fullName='").append(fullName).append('\'');
+-        sb.append(", email='").append(email).append('\'');
+-        sb.append('}');
+-        return sb.toString();
+-    }
+-}
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/CallbackApiHandler.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/CallbackApiHandler.java
+deleted file mode 100644
+index 66d9877..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/CallbackApiHandler.java
++++ /dev/null
+@@ -1,102 +0,0 @@
+-package com.vk.api.examples.youtrack.callback;
+-
+-import com.vk.api.examples.youtrack.callback.commands.GetConfigCommand;
+-import com.vk.api.examples.youtrack.callback.commands.HelpCommand;
+-import com.vk.api.examples.youtrack.callback.commands.LoginCommand;
+-import com.vk.api.examples.youtrack.callback.commands.LogoutCommand;
+-import com.vk.api.examples.youtrack.callback.commands.MineTasksCommand;
+-import com.vk.api.examples.youtrack.callback.commands.SearchTasksCommand;
+-import com.vk.api.examples.youtrack.callback.commands.SetConfigCommand;
+-import com.vk.api.examples.youtrack.callback.commands.UptimeCommand;
+-import com.vk.api.examples.youtrack.jobs.MembersUpdateJob;
+-import com.vk.api.examples.youtrack.storage.Statistic;
+-import com.vk.api.sdk.callback.CallbackApi;
+-import com.vk.api.sdk.objects.messages.Message;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class CallbackApiHandler extends CallbackApi {
+-
+-    private static final Logger LOG = LogManager.getLogger(MembersUpdateJob.class);
+-
+-    private static Integer parseInt(String[] args, int index, int defaultValue) {
+-        if (args.length <= index) {
+-            return defaultValue;
+-        }
+-
+-        try {
+-            return Integer.parseInt(args[index]);
+-        } catch (NumberFormatException e) {
+-            return defaultValue;
+-        }
+-    }
+-
+-    @Override
+-    public void messageNew(Integer groupId, Message message) {
+-        Integer vkId = message.getUserId();
+-        String[] args = message.getBody().split(" ");
+-        String command = args[0];
+-
+-        try {
+-            switch (command.toLowerCase()) {
+-                case "help":
+-                    new HelpCommand(vkId).run();
+-                    break;
+-
+-                case "login":
+-                    if (args.length != 2) {
+-                        new HelpCommand(vkId).run();
+-                        break;
+-                    }
+-
+-                    String ytLogin = args[1];
+-                    new LoginCommand(vkId, ytLogin).run();
+-                    break;
+-
+-                case "logout":
+-                    new LogoutCommand(vkId).run();
+-                    break;
+-
+-                case "mine":
+-                    new MineTasksCommand(vkId, parseInt(args, 1, 10)).run();
+-                    break;
+-
+-                case "search":
+-                    String filter = message.getBody().substring(command.length() + 1);
+-                    new SearchTasksCommand(vkId, filter, 10).run();
+-                    break;
+-
+-                case "config":
+-                    new GetConfigCommand(vkId).run();
+-                    break;
+-
+-                case "setconfig":
+-                    if (args.length != 3) {
+-                        new HelpCommand(vkId).run();
+-                        break;
+-                    }
+-
+-                    String name = args[1];
+-                    String value = args[2];
+-
+-                    new SetConfigCommand(vkId, name, value).run();
+-                    break;
+-
+-                case "uptime":
+-                    new UptimeCommand(vkId).run();
+-                    break;
+-
+-                default:
+-                    new HelpCommand(vkId).run();
+-            }
+-
+-            Statistic.increment(Statistic.Event.COMMAND);
+-        } catch (Exception e) {
+-            LOG.error("Can't execute command", e);
+-            Statistic.increment(Statistic.Event.FAILED_COMMAND);
+-        }
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/CreateTaskCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/CreateTaskCommand.java
+deleted file mode 100644
+index 96fba0b..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/CreateTaskCommand.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.actions.IssuesApi;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.storage.IssueNotifications;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.io.IOException;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class CreateTaskCommand extends VkCommand {
+-
+-    private String project;
+-    private String text;
+-    private String description;
+-
+-    public CreateTaskCommand(Integer vkId, String project, String text, String description) {
+-        super(vkId);
+-        this.project = project;
+-        this.text = text;
+-        this.description = description;
+-    }
+-
+-    private static String issue(Issue issue) {
+-        String changes = "";
+-        String url = Application.ytHost() + "/issue/" + issue.getId();
+-        String summary = issue.getFieldValue("summary") != null ? issue.getFieldValue("summary") : "";
+-        String description = issue.getFieldValue("description") != null ? issue.getFieldValue("description") : "";
+-        String title = summary.isEmpty() ? description.substring(0, Math.min(description.length(), 100)) + "..." : summary;
+-        return issue.getId() + "\n" + "Issue updated" + "\n" + issue.getFieldValue("Type") + " - " + title + "\n\n" + changes + url + "\n-------";
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException, IOException {
+-        String issueId = IssuesApi.create(project, text, description);
+-        IssueNotifications.getInstance().disable(getVkId(), issueId);
+-
+-        Issue issue = IssuesApi.getIssue(issueId);
+-        String msg = issue(issue);
+-        sendMessage("Created: \n" + msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/GetConfigCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/GetConfigCommand.java
+deleted file mode 100644
+index 87f6213..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/GetConfigCommand.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.storage.users.SettingName;
+-import com.vk.api.examples.youtrack.storage.users.SettingValue;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUser;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.util.HashMap;
+-import java.util.Map;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class GetConfigCommand extends VkCommand {
+-
+-    public GetConfigCommand(Integer vkId) {
+-        super(vkId);
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException {
+-        YouTrackUser youTrackUser = YouTrackUsersStorage.getInstance().getUserById(getVkId());
+-
+-        Map<SettingName, SettingValue> settings = youTrackUser.getSettings();
+-        String response = "";
+-        Map<SettingName, String> description = new HashMap<>();
+-        description.put(SettingName.ISSUE_NOTIFICATION, "Notification about issues changes");
+-        description.put(SettingName.CLOSED_ISSUE_NOTIFICATION, "Notification about closed issues changes");
+-
+-        for (Map.Entry<SettingName, String> entry : description.entrySet()) {
+-            SettingValue value = settings.get(entry.getKey());
+-            if (value == null) {
+-                value = SettingValue.ON;
+-            }
+-
+-            response += entry.getKey() + ": " + value + " - " + entry.getValue() + "\n";
+-        }
+-
+-        String msg = response;
+-
+-
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/HelpCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/HelpCommand.java
+deleted file mode 100644
+index 099aad0..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/HelpCommand.java
++++ /dev/null
+@@ -1,33 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class HelpCommand extends VkCommand {
+-
+-    public HelpCommand(Integer vkId) {
+-        super(vkId);
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException {
+-        String msg = "I understand the following commands:\n\n" +
+-                "login [yt_login] - login\n" +
+-                "logout - logout\n\n" +
+-                "config - show configuration for notifications\n" +
+-                "setconfig [name] [on|off] - configure notifications\n" +
+-                "mine [count] - assigned to me tasks\n" +
+-                "search [filter] - search issues by query\n" +
+-                "uptime - uptime information about bot\n" +
+-                "help - information about commands\n\n" +
+-                "Version " + Application.getVersion() + "\n" +
+-                "If you have ideas for improvements for the bot, please contact https://vk.me/tsivarev_a.";
+-
+-
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LoginCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LoginCommand.java
+deleted file mode 100644
+index ded441f..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LoginCommand.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.IOException;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class LoginCommand extends VkCommand {
+-
+-    private static final Logger LOG = LogManager.getLogger(LoginCommand.class);
+-
+-    private String ytLogin;
+-
+-    public LoginCommand(Integer vkId, String ytLogin) {
+-        super(vkId);
+-        this.ytLogin = ytLogin;
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException, IOException {
+-        //@TODO: Add moderation
+-//        User user = UsersApi.getUser(ytLogin);
+-//        if (StringUtils.isBlank(user.getFullName())) {
+-//            LOG.info("Can't find user " + ytLogin + " in youtrack");
+-//            sendMessage("This is invalid login");
+-//            return;
+-//        }
+-
+-        try {
+-            YouTrackUsersStorage.getInstance().add(ytLogin, getVkId());
+-        } catch (IOException e) {
+-            throw new IllegalStateException("Can't add user", e);
+-        }
+-
+-        String msg = "Good! You're in team!";
+-        sendMessage(msg);
+-
+-        new HelpCommand(getVkId()).run();
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LogoutCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LogoutCommand.java
+deleted file mode 100644
+index 0942f7e..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/LogoutCommand.java
++++ /dev/null
+@@ -1,29 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.io.IOException;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class LogoutCommand extends VkCommand {
+-
+-    public LogoutCommand(Integer vkId) {
+-        super(vkId);
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException {
+-        try {
+-            YouTrackUsersStorage.getInstance().remove(getVkId());
+-        } catch (IOException e) {
+-            throw new IllegalStateException("Can't remove user", e);
+-        }
+-
+-        String msg = "Bye bye! Hope to see you soon.";
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/MineTasksCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/MineTasksCommand.java
+deleted file mode 100644
+index 06d5338..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/MineTasksCommand.java
++++ /dev/null
+@@ -1,68 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.actions.IssuesApi;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueList;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUser;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.IOException;
+-import java.util.List;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class MineTasksCommand extends VkCommand {
+-
+-    private static final Logger LOG = LogManager.getLogger(MineTasksCommand.class);
+-
+-    private Integer count;
+-
+-    public MineTasksCommand(Integer vkId, Integer count) {
+-        super(vkId);
+-        this.count = count;
+-    }
+-
+-    private static String issueList(List<Issue> issues) {
+-        if (issues == null || issues.isEmpty()) {
+-            return "Not found";
+-
+-        }
+-
+-        String msg = "";
+-        int index = 1;
+-        for (Issue issue : issues) {
+-            String url = "(" + Application.ytHost() + "/issue/" + issue.getId() + ")";
+-            String summary = issue.getFieldValue("summary");
+-            String description = issue.getFieldValue("description");
+-            String title = summary == null || summary.isEmpty() ? description.substring(0, Math.min(description.length(), 100)) + "..." : summary;
+-
+-            msg += index + ". " + title + " " + url + "\n\n";
+-            index++;
+-        }
+-
+-
+-        return msg;
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException, IOException {
+-        YouTrackUser youTrackUser = YouTrackUsersStorage.getInstance().getUserById(getVkId());
+-
+-        IssueList issueList;
+-
+-        try {
+-            issueList = IssuesApi.getIssues("for:" + youTrackUser.getYtLogin() + " #Unresolved order by: updated", count);
+-        } catch (IOException e) {
+-            throw new IllegalStateException("Can't search issues", e);
+-        }
+-
+-        String msg = issueList(issueList.getIssues());
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SearchTasksCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SearchTasksCommand.java
+deleted file mode 100644
+index 492c702..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SearchTasksCommand.java
++++ /dev/null
+@@ -1,68 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.actions.IssuesApi;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueList;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUser;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.io.IOException;
+-import java.util.List;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class SearchTasksCommand extends VkCommand {
+-
+-    private String filter;
+-    private Integer count;
+-
+-    public SearchTasksCommand(Integer vkId, String filter, Integer count) {
+-        super(vkId);
+-        this.filter = filter;
+-        this.count = count;
+-    }
+-
+-    private static String issueList(List<Issue> issues) {
+-        if (issues == null || issues.isEmpty()) {
+-            return "Not found";
+-
+-        }
+-
+-        String msg = "";
+-        int index = 1;
+-        for (Issue issue : issues) {
+-            String url = "(" + Application.ytHost() + "/issue/" + issue.getId() + ")";
+-            String summary = issue.getFieldValue("summary");
+-            String description = issue.getFieldValue("description");
+-            String title = summary == null || summary.isEmpty() ? description.substring(0, Math.min(description.length(), 100)) + "..." : summary;
+-
+-            msg += index + ". " + title + " " + url + "\n\n";
+-            index++;
+-        }
+-
+-
+-        return msg;
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException, IOException {
+-        YouTrackUser youTrackUser = YouTrackUsersStorage.getInstance().getUserById(getVkId());
+-
+-        filter = filter.replaceAll("me", youTrackUser.getYtLogin());
+-
+-        IssueList issueList;
+-
+-        try {
+-            issueList = IssuesApi.getIssues(filter, count);
+-        } catch (IOException e) {
+-            throw new IllegalStateException("Can't search issues", e);
+-        }
+-
+-        String msg = issueList(issueList.getIssues());
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SetConfigCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SetConfigCommand.java
+deleted file mode 100644
+index bd88065..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/SetConfigCommand.java
++++ /dev/null
+@@ -1,59 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.storage.users.SettingName;
+-import com.vk.api.examples.youtrack.storage.users.SettingValue;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUser;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.io.IOException;
+-import java.util.Map;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class SetConfigCommand extends VkCommand {
+-
+-    private final String value;
+-    private final String name;
+-
+-    public SetConfigCommand(Integer vkId, String name, String value) {
+-        super(vkId);
+-        this.name = name;
+-        this.value = value;
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException {
+-        YouTrackUser youTrackUser = YouTrackUsersStorage.getInstance().getUserById(getVkId());
+-        Map<SettingName, SettingValue> settings = youTrackUser.getSettings();
+-
+-        SettingName setting;
+-        try {
+-            setting = SettingName.byValue(name);
+-        } catch (IllegalArgumentException e) {
+-            sendMessage("Wrong name");
+-            return;
+-        }
+-
+-        SettingValue settingValue;
+-        try {
+-            settingValue = SettingValue.byValue(value);
+-        } catch (IllegalArgumentException e) {
+-            sendMessage("Wrong value");
+-            return;
+-        }
+-
+-        settings.put(setting, settingValue);
+-
+-        try {
+-            YouTrackUsersStorage.getInstance().updateSettings(youTrackUser);
+-        } catch (IOException e) {
+-            throw new IllegalStateException("Can't update settings", e);
+-        }
+-
+-        String msg = "Saved";
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/UptimeCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/UptimeCommand.java
+deleted file mode 100644
+index 8a549a8..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/UptimeCommand.java
++++ /dev/null
+@@ -1,39 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.storage.Statistic;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.lang.management.ManagementFactory;
+-import java.lang.management.RuntimeMXBean;
+-import java.util.concurrent.TimeUnit;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class UptimeCommand extends VkCommand {
+-
+-    public UptimeCommand(Integer vkId) {
+-        super(vkId);
+-    }
+-
+-    @Override
+-    public void run() throws ClientException, ApiException {
+-        RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
+-        long uptime = mxBean.getUptime();
+-
+-        String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(uptime),
+-                TimeUnit.MILLISECONDS.toMinutes(uptime) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(uptime)),
+-                TimeUnit.MILLISECONDS.toSeconds(uptime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(uptime)));
+-
+-        String msg = "Uptime is " + hms + ".\n" +
+-                "Statistics: \n"
+-                + "Executed commands " + Statistic.get(Statistic.Event.COMMAND) + "\n"
+-                + "Failed commands " + Statistic.get(Statistic.Event.FAILED_COMMAND) + "\n"
+-                + "Loaded users " + YouTrackUsersStorage.getInstance().getCount();
+-
+-
+-        sendMessage(msg);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/VkCommand.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/VkCommand.java
+deleted file mode 100644
+index c04df32..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/callback/commands/VkCommand.java
++++ /dev/null
+@@ -1,32 +0,0 @@
+-package com.vk.api.examples.youtrack.callback.commands;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.util.Random;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public abstract class VkCommand {
+-
+-    private Integer vkId;
+-
+-    public VkCommand(Integer vkId) {
+-        this.vkId = vkId;
+-    }
+-
+-    public abstract void run() throws Exception;
+-
+-    public Integer getVkId() {
+-        return vkId;
+-    }
+-
+-    public void sendMessage(String msg) throws ClientException, ApiException {
+-        Application.vk().messages().send(Application.actor())
+-                .randomId(new Random().nextInt(10000))
+-                .message(msg)
+-                .peerId(getVkId()).execute();
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/Job.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/Job.java
+deleted file mode 100644
+index f8ac367..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/Job.java
++++ /dev/null
+@@ -1,9 +0,0 @@
+-package com.vk.api.examples.youtrack.jobs;
+-
+-/**
+- * Created by Anton Tsivarev on 29.04.16.
+- */
+-public interface Job {
+-
+-    void doJob() throws Exception;
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/MembersUpdateJob.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/MembersUpdateJob.java
+deleted file mode 100644
+index beacb1a..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/MembersUpdateJob.java
++++ /dev/null
+@@ -1,64 +0,0 @@
+-package com.vk.api.examples.youtrack.jobs;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.storage.LangStorage;
+-import com.vk.api.examples.youtrack.storage.MembersStorage;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiMessagesDenySendException;
+-import com.vk.api.sdk.objects.groups.responses.GetMembersResponse;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.util.HashSet;
+-import java.util.Random;
+-import java.util.Set;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class MembersUpdateJob implements Job {
+-
+-    private static final Logger LOG = LogManager.getLogger(MembersUpdateJob.class);
+-
+-    @Override
+-    public void doJob() throws Exception {
+-        GetMembersResponse getMembers = Application.vk().groups().getMembers(Application.actor())
+-                .groupId(String.valueOf(-Application.actor().getId()))
+-                .execute();
+-
+-
+-        Set<Integer> toRemove = YouTrackUsersStorage.getInstance().getIds();
+-        Set<Integer> newMembers = new HashSet<>();
+-        for (Integer userId : getMembers.getItems()) {
+-            toRemove.remove(userId);
+-
+-            if (YouTrackUsersStorage.getInstance().getUserById(userId) != null) {
+-                continue;
+-            }
+-
+-            if (MembersStorage.getInstance().contains(userId)) {
+-                continue;
+-            }
+-
+-            newMembers.add(userId);
+-        }
+-
+-        for (Integer userId : newMembers) {
+-            try {
+-                Application.vk().messages().send(Application.actor())
+-                        .randomId(new Random().nextInt(10000))
+-                        .message(LangStorage.getInstance().get("welcome"))
+-                        .peerId(userId).execute();
+-            } catch (ApiMessagesDenySendException e) {
+-                LOG.warn("No messages with user " + userId);
+-            }
+-
+-            MembersStorage.getInstance().add(userId);
+-        }
+-
+-        for (Integer userId : toRemove) {
+-            LOG.info("User " + userId + " is not group member. Remove.");
+-            YouTrackUsersStorage.getInstance().remove(userId);
+-        }
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NewsJob.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NewsJob.java
+deleted file mode 100644
+index 04c1ce7..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NewsJob.java
++++ /dev/null
+@@ -1,52 +0,0 @@
+-package com.vk.api.examples.youtrack.jobs;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.storage.DataStorage;
+-import com.vk.api.examples.youtrack.storage.MembersStorage;
+-import com.vk.api.examples.youtrack.storage.Statistic;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-
+-import java.io.IOException;
+-import java.util.Arrays;
+-import java.util.List;
+-import java.util.Random;
+-import java.util.Set;
+-
+-/**
+- * Created by tsivarev on 06.05.16.
+- */
+-public class NewsJob implements Job {
+-
+-    private final static int NEWS_ID = 1;
+-
+-    private static String getNews(Integer userId) {
+-        String msg = "Hi!";
+-
+-        List<String> endsOne = Arrays.asList("Have a nice day!", "Have a good day!", "Have a fun time!", "Your dear bot.");
+-        List<String> endsTwo = Arrays.asList("&#128521;", "&#128540;", "&#128526;", "&#9786;", "&#128522;", "&#9996;");
+-        return msg + endsOne.get(userId % endsOne.size()) + " " + endsTwo.get(userId % endsTwo.size());
+-    }
+-
+-    private static void sendMessage(int vkId, String msg) throws ClientException, ApiException {
+-        Statistic.increment(Statistic.Event.SEND_NOTIFY);
+-        Application.vk().messages().send(Application.actor())
+-                .randomId(new Random().nextInt(10000))
+-                .message(msg)
+-                .peerId(vkId).execute();
+-    }
+-
+-    @Override
+-    public void doJob() throws IOException, ClientException, ApiException {
+-        int lastNewsId = DataStorage.getInstance().getInt("news.lastId");
+-        if (lastNewsId < NEWS_ID) {
+-            Set<Integer> userIds = MembersStorage.getInstance().getIds();
+-            for (Integer userId : userIds) {
+-                String news = getNews(userId);
+-                sendMessage(userId, news);
+-            }
+-        }
+-
+-        DataStorage.getInstance().add("news.lastId", NEWS_ID);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NotifyIssueChangesJob.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NotifyIssueChangesJob.java
+deleted file mode 100644
+index 527a392..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/jobs/NotifyIssueChangesJob.java
++++ /dev/null
+@@ -1,179 +0,0 @@
+-package com.vk.api.examples.youtrack.jobs;
+-
+-import com.vk.api.examples.youtrack.Application;
+-import com.vk.api.examples.youtrack.api.actions.IssuesApi;
+-import com.vk.api.examples.youtrack.api.actions.ProjectApi;
+-import com.vk.api.examples.youtrack.api.objects.issues.Issue;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueChange;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueChangeField;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueChangeList;
+-import com.vk.api.examples.youtrack.api.objects.issues.IssueList;
+-import com.vk.api.examples.youtrack.api.objects.projects.ProjectList;
+-import com.vk.api.examples.youtrack.storage.DataStorage;
+-import com.vk.api.examples.youtrack.storage.IssueNotifications;
+-import com.vk.api.examples.youtrack.storage.Statistic;
+-import com.vk.api.examples.youtrack.storage.users.SettingName;
+-import com.vk.api.examples.youtrack.storage.users.SettingValue;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUser;
+-import com.vk.api.examples.youtrack.storage.users.YouTrackUsersStorage;
+-import com.vk.api.sdk.exceptions.ApiException;
+-import com.vk.api.sdk.exceptions.ClientException;
+-import org.apache.commons.lang3.StringUtils;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.IOException;
+-import java.util.HashSet;
+-import java.util.Random;
+-import java.util.Set;
+-
+-/**
+- * Created by tsivarev on 29.04.16.
+- */
+-public class NotifyIssueChangesJob implements Job {
+-
+-    private static final Logger LOG = LogManager.getLogger(NotifyIssueChangesJob.class);
+-
+-    private static final int COUNT = 100;
+-    private static final Set<String> SKIP_FIELDS = new HashSet<>();
+-    private static final String LAST_TIME_KEY = "yt.bot.lastTime";
+-
+-    static {
+-        SKIP_FIELDS.add("updated");
+-        SKIP_FIELDS.add("resolved");
+-    }
+-
+-    private long lastTime;
+-
+-    public NotifyIssueChangesJob() {
+-        lastTime = DataStorage.getInstance().getLong(LAST_TIME_KEY);
+-        if (lastTime == 0) {
+-            lastTime = System.currentTimeMillis();
+-            DataStorage.getInstance().add(LAST_TIME_KEY, lastTime);
+-        }
+-    }
+-
+-    public static void sendMessage(Integer userId, String msg) throws IOException, ClientException, ApiException {
+-        YouTrackUser user = YouTrackUsersStorage.getInstance().getUserById(userId);
+-        if (user != null && user.getSettingValue(SettingName.ISSUE_NOTIFICATION) == SettingValue.OFF) {
+-            return;
+-        }
+-
+-        Statistic.increment(Statistic.Event.SEND_NOTIFY);
+-        Application.vk().messages().send(Application.actor())
+-                .randomId(new Random().nextInt(10000))
+-                .message(msg)
+-                .peerId(userId).execute();
+-    }
+-
+-    @Override
+-    public void doJob() throws IOException, ClientException, ApiException {
+-        ProjectList list = ProjectApi.list();
+-        for (ProjectList.Project project : list.getProjects()) {
+-            IssueList issueList = IssuesApi.getIssues(project.getShortName(), COUNT, lastTime);
+-            if (issueList.getIssues().isEmpty()) {
+-                continue;
+-            }
+-
+-            for (Issue issue : issueList.getIssues()) {
+-                long updatedTime = Long.parseLong(issue.getFieldValue("updated"));
+-                if (lastTime < updatedTime) {
+-                    lastTime = updatedTime;
+-                    DataStorage.getInstance().add(LAST_TIME_KEY, lastTime);
+-                }
+-
+-                String assignee = issue.getFieldValue("Assignee") != null ? issue.getFieldValue("Assignee") : "";
+-                String reporter = issue.getFieldValue("reporterName") != null ? issue.getFieldValue("reporterName") : "";
+-
+-                Boolean isClosed = issue.getFieldValue("State").equalsIgnoreCase("Closed");
+-
+-                String updater = "";
+-                IssueChangeList changeList = IssuesApi.getChanges(issue.getId());
+-                IssueChange change = null;
+-                if (!changeList.getChanges().isEmpty()) {
+-                    change = changeList.getChanges().get(changeList.getChanges().size() - 1);
+-                    for (IssueChangeField field : change.getFields()) {
+-                        if (field.getName().equals("updaterName")) {
+-                            if (field.getValue() != null) {
+-                                updater = field.getValue();
+-                            }
+-                            break;
+-                        }
+-                    }
+-                }
+-
+-                if (!updater.equalsIgnoreCase(assignee) && !assignee.equalsIgnoreCase(reporter)) {
+-                    LOG.info("Assignee: " + assignee);
+-                    LOG.info("Updater: " + updater);
+-                    YouTrackUser youTrackUser = YouTrackUsersStorage.getInstance().getUserByLogin(assignee);
+-                    if (youTrackUser != null) {
+-                        if (IssueNotifications.getInstance().isDisabled(youTrackUser.getVkId(), issue.getId())) {
+-                            LOG.info("Temp disabled issues notifications");
+-                        } else if (isClosed && youTrackUser.getSettingValue(SettingName.CLOSED_ISSUE_NOTIFICATION) == SettingValue.OFF) {
+-                            LOG.info("Disabled closed issues notifications");
+-                        } else {
+-                            sendMessage(youTrackUser.getVkId(), getMessage(issue, change));
+-                        }
+-                    }
+-                }
+-
+-                if (!updater.isEmpty() && !updater.equalsIgnoreCase(reporter)) {
+-                    LOG.info("Reporter: " + reporter);
+-                    LOG.info("Updater: " + updater);
+-                    YouTrackUser youTrackUser = YouTrackUsersStorage.getInstance().getUserByLogin(reporter);
+-                    if (youTrackUser != null) {
+-                        if (IssueNotifications.getInstance().isDisabled(youTrackUser.getVkId(), issue.getId())) {
+-                            LOG.info("Temp disabled issues notifications");
+-                        } else if (isClosed && youTrackUser.getSettingValue(SettingName.CLOSED_ISSUE_NOTIFICATION) == SettingValue.OFF) {
+-                            LOG.info("Disabled closed issues notifications");
+-                        } else {
+-                            sendMessage(youTrackUser.getVkId(), getMessage(issue, change));
+-                        }
+-                    }
+-                }
+-            }
+-        }
+-    }
+-
+-    private String getMessage(Issue issue, IssueChange change) throws IOException {
+-        if (change != null) {
+-            return changedIssueMessage(issue, change);
+-        }
+-
+-        return newIssueMessage(issue);
+-    }
+-
+-    private String newIssueMessage(Issue issue) {
+-        String url = Application.ytHost() + "/issue/" + issue.getId();
+-        String summary = issue.getFieldValue("summary") != null ? issue.getFieldValue("summary") : "";
+-        String description = issue.getFieldValue("description") != null ? issue.getFieldValue("description") : "";
+-        String title = summary.isEmpty() ? description.substring(0, Math.min(description.length(), 100)) + "..." : summary;
+-        return issue.getId() + "\n" + "New issues from " + issue.getFieldValue("reporterName") + "\n" + issue.getFieldValue("Type") + " - " + title + "\n\n" + url + "\n-------";
+-    }
+-
+-    private String changedIssueMessage(Issue issue, IssueChange change) {
+-        String changes = "";
+-        if (change != null) {
+-            changes = "Changes:\n";
+-            for (IssueChangeField field : change.getFields()) {
+-                if (SKIP_FIELDS.contains(field.getName()) || StringUtils.isEmpty(field.getName())) {
+-                    continue;
+-                }
+-
+-                if (field.getName().equals("updaterName")) {
+-                    changes += "Updater: " + field.getValue() + "\n";
+-                } else {
+-                    changes += StringUtils.capitalize(field.getName()) + ": " + field.getOldValue() + " > " + field.getNewValue() + "\n";
+-                }
+-            }
+-
+-            changes += "\n\n";
+-        }
+-
+-        String url = Application.ytHost() + "/issue/" + issue.getId();
+-        String summary = issue.getFieldValue("summary") != null ? issue.getFieldValue("summary") : "";
+-        String description = issue.getFieldValue("description") != null ? issue.getFieldValue("description") : "";
+-        String title = summary.isEmpty() ? description.substring(0, Math.min(description.length(), 100)) + "..." : summary;
+-        return issue.getId() + "\n" + "Issue updated" + "\n" + issue.getFieldValue("Type") + " - " + title + "\n\n" + changes + url + "\n-------";
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/CallbackRequestHandler.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/CallbackRequestHandler.java
+deleted file mode 100644
+index 758375a..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/CallbackRequestHandler.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-package com.vk.api.examples.youtrack.server;
+-
+-import com.vk.api.examples.youtrack.callback.CallbackApiHandler;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-import org.eclipse.jetty.server.Request;
+-import org.eclipse.jetty.server.handler.AbstractHandler;
+-
+-import javax.servlet.ServletException;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import java.io.IOException;
+-import java.util.stream.Collectors;
+-
+-/**
+- * Created by Anton Tsivarev on 09.09.16.
+- */
+-public class CallbackRequestHandler extends AbstractHandler {
+-
+-    private static final Logger LOG = LogManager.getLogger(CallbackRequestHandler.class);
+-
+-    private final static String OK_BODY = "ok";
+-    private final CallbackApiHandler callbackApiHandler;
+-
+-    public CallbackRequestHandler() {
+-        callbackApiHandler = new CallbackApiHandler();
+-    }
+-
+-    @Override
+-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+-        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+-            return;
+-        }
+-
+-        String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+-        boolean handled = callbackApiHandler.parse(body);
+-        if (!handled) {
+-            return;
+-        }
+-
+-        response.setContentType("text/html;charset=utf-8");
+-        response.setStatus(HttpServletResponse.SC_OK);
+-        baseRequest.setHandled(true);
+-        response.getWriter().println(OK_BODY);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/ConfirmationCodeRequestHandler.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/ConfirmationCodeRequestHandler.java
+deleted file mode 100644
+index 80b0143..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/server/ConfirmationCodeRequestHandler.java
++++ /dev/null
+@@ -1,58 +0,0 @@
+-package com.vk.api.examples.youtrack.server;
+-
+-import com.google.gson.Gson;
+-import com.google.gson.JsonObject;
+-import com.google.gson.reflect.TypeToken;
+-import com.vk.api.sdk.callback.objects.CallbackMessage;
+-import com.vk.api.sdk.callback.objects.CallbackMessageType;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-import org.eclipse.jetty.server.Request;
+-import org.eclipse.jetty.server.handler.AbstractHandler;
+-
+-import javax.servlet.ServletException;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import java.io.IOException;
+-import java.lang.reflect.Type;
+-import java.util.stream.Collectors;
+-
+-/**
+- * Created by Anton Tsivarev on 09.09.16.
+- */
+-public class ConfirmationCodeRequestHandler extends AbstractHandler {
+-
+-    private static final Logger LOG = LogManager.getLogger(ConfirmationCodeRequestHandler.class);
+-
+-    private final Gson gson;
+-    private final String confirmationCode;
+-
+-    public ConfirmationCodeRequestHandler(String confirmationCode) {
+-        this.confirmationCode = confirmationCode;
+-        gson = new Gson();
+-    }
+-
+-    @Override
+-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+-        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+-            return;
+-        }
+-
+-        String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+-        Type typeOfClass = new TypeToken<CallbackMessage<JsonObject>>() {
+-        }.getType();
+-        CallbackMessage<JsonObject> callback = gson.fromJson(body, typeOfClass);
+-        if (callback == null) {
+-            return;
+-        }
+-
+-        if (callback.getType() != CallbackMessageType.CONFIRMATION) {
+-            return;
+-        }
+-
+-        response.setContentType("text/html;charset=utf-8");
+-        response.setStatus(HttpServletResponse.SC_OK);
+-        baseRequest.setHandled(true);
+-        response.getWriter().println(confirmationCode);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/DataStorage.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/DataStorage.java
+deleted file mode 100644
+index 4da87e8..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/DataStorage.java
++++ /dev/null
+@@ -1,83 +0,0 @@
+-package com.vk.api.examples.youtrack.storage;
+-
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.FileReader;
+-import java.io.FileWriter;
+-import java.io.IOException;
+-import java.util.Properties;
+-
+-/**
+- * Created by tsivarev on 05.05.16.
+- */
+-public class DataStorage {
+-
+-    private static final Logger LOG = LogManager.getLogger(DataStorage.class);
+-
+-    private static DataStorage instance;
+-
+-    private Properties properties;
+-
+-    private String filePath = null;
+-
+-    private DataStorage() {
+-        properties = new Properties();
+-    }
+-
+-    public static DataStorage getInstance() {
+-        if (instance == null) {
+-            instance = new DataStorage();
+-        }
+-
+-        return instance;
+-    }
+-
+-    public void load(String path) {
+-        LOG.info("Load data from " + path);
+-
+-        filePath = path;
+-
+-        try {
+-            properties.load(new FileReader(path));
+-        } catch (IOException e) {
+-            LOG.error("Can't load properties file", e);
+-            throw new IllegalStateException(e);
+-        }
+-
+-        LOG.info("Loaded config", properties);
+-    }
+-
+-    public void add(String name, Object value) {
+-        properties.put(name, value.toString());
+-        if (filePath != null) {
+-            try {
+-                properties.store(new FileWriter(filePath), "");
+-            } catch (IOException e) {
+-                LOG.error("Can't store properties file", e);
+-                throw new IllegalStateException(e);
+-            }
+-        }
+-    }
+-
+-    public String get(String name) {
+-        return properties.getProperty(name);
+-    }
+-
+-    public int getInt(String name) {
+-        try {
+-            return Integer.parseInt(properties.getProperty(name));
+-        } catch (NumberFormatException e) {
+-            return 0;
+-        }
+-    }
+-
+-    public long getLong(String name) {
+-        try {
+-            return Long.parseLong(properties.getProperty(name));
+-        } catch (NumberFormatException e) {
+-            return 0;
+-        }
+-    }
+-}
+-
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/IssueNotifications.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/IssueNotifications.java
+deleted file mode 100644
+index ed7d1eb..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/IssueNotifications.java
++++ /dev/null
+@@ -1,44 +0,0 @@
+-package com.vk.api.examples.youtrack.storage;
+-
+-import java.util.HashMap;
+-import java.util.Map;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class IssueNotifications {
+-
+-    private static final Map<String, Long> MAP = new HashMap<>();
+-
+-    private static IssueNotifications instance;
+-
+-    public static IssueNotifications getInstance() {
+-        if (instance == null) {
+-            instance = new IssueNotifications();
+-        }
+-
+-        return instance;
+-    }
+-
+-    public void disable(Integer userId, String issueId) {
+-        MAP.put(getId(userId, issueId), System.currentTimeMillis() + 60 * 1000);
+-    }
+-
+-    public boolean isDisabled(Integer userId, String issueId) {
+-        Long time = MAP.get(getId(userId, issueId));
+-        if (time == null) {
+-            return false;
+-        }
+-
+-        if (time > System.currentTimeMillis()) {
+-            return true;
+-        }
+-
+-        MAP.remove(getId(userId, issueId));
+-        return false;
+-    }
+-
+-    private String getId(Integer userId, String issueId) {
+-        return userId + "__" + issueId;
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/LangStorage.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/LangStorage.java
+deleted file mode 100644
+index ddcf699..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/LangStorage.java
++++ /dev/null
+@@ -1,66 +0,0 @@
+-package com.vk.api.examples.youtrack.storage;
+-
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.FileReader;
+-import java.io.FileWriter;
+-import java.io.IOException;
+-import java.util.Properties;
+-
+-/**
+- * Created by tsivarev on 07.09.16.
+- */
+-public class LangStorage {
+-
+-    private static final Logger LOG = LogManager.getLogger(DataStorage.class);
+-
+-    private static LangStorage instance;
+-
+-    private Properties properties;
+-
+-    private String filePath = null;
+-
+-    private LangStorage() {
+-        properties = new Properties();
+-    }
+-
+-    public static LangStorage getInstance() {
+-        if (instance == null) {
+-            instance = new LangStorage();
+-        }
+-
+-        return instance;
+-    }
+-
+-    public void load(String path) {
+-        LOG.info("Load data from " + path);
+-
+-        filePath = path;
+-
+-        try {
+-            properties.load(new FileReader(path));
+-        } catch (IOException e) {
+-            LOG.error("Can't load properties file", e);
+-            throw new IllegalStateException(e);
+-        }
+-
+-        LOG.info("Loaded config", properties);
+-    }
+-
+-    public void add(String name, Object value) {
+-        properties.put(name, value.toString());
+-        if (filePath != null) {
+-            try {
+-                properties.store(new FileWriter(filePath), "");
+-            } catch (IOException e) {
+-                LOG.error("Can't store properties file", e);
+-                throw new IllegalStateException(e);
+-            }
+-        }
+-    }
+-
+-    public String get(String name) {
+-        return properties.getProperty(name);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/MembersStorage.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/MembersStorage.java
+deleted file mode 100644
+index 8a12420..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/MembersStorage.java
++++ /dev/null
+@@ -1,102 +0,0 @@
+-package com.vk.api.examples.youtrack.storage;
+-
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.BufferedReader;
+-import java.io.FileReader;
+-import java.io.FileWriter;
+-import java.io.IOException;
+-import java.util.HashSet;
+-import java.util.Set;
+-
+-/**
+- * Created by tsivarev on 29.04.16.
+- */
+-public class MembersStorage {
+-
+-    private static final Logger LOG = LogManager.getLogger(MembersStorage.class);
+-    private static final Set<Integer> MEMBERS = new HashSet<>();
+-    private static MembersStorage instance;
+-    private String filePath;
+-
+-    private MembersStorage() {
+-    }
+-
+-    public static MembersStorage getInstance() {
+-        if (instance == null) {
+-            instance = new MembersStorage();
+-        }
+-
+-        return instance;
+-    }
+-
+-    public void load(String path) {
+-        LOG.info("Load data from " + path);
+-
+-        filePath = path;
+-
+-        BufferedReader br = null;
+-        String line;
+-
+-
+-        try {
+-            br = new BufferedReader(new FileReader(filePath));
+-            while ((line = br.readLine()) != null) {
+-                deserializeLine(line);
+-            }
+-
+-        } catch (Exception e) {
+-            LOG.error("Can't load " + filePath, e);
+-        } finally {
+-            if (br != null) {
+-                try {
+-                    br.close();
+-                } catch (IOException e) {
+-                    LOG.error("Can't close stream for " + filePath);
+-                }
+-            }
+-        }
+-
+-
+-        LOG.info("Loaded " + MEMBERS.size() + " users");
+-    }
+-
+-    private void deserializeLine(String line) {
+-        Integer vkId = Integer.valueOf(line);
+-        MEMBERS.add(vkId);
+-    }
+-
+-    private String serializeLine(Integer vkId) {
+-        return vkId + "\n";
+-    }
+-
+-
+-    public void add(Integer vkId) throws IOException {
+-        MEMBERS.add(vkId);
+-        save();
+-    }
+-
+-    public void remove(Integer vkId) throws IOException {
+-        MEMBERS.remove(vkId);
+-        save();
+-    }
+-
+-    private void save() throws IOException {
+-        FileWriter writer = new FileWriter(filePath);
+-        for (Integer vkId : MEMBERS) {
+-            writer.append(serializeLine(vkId));
+-        }
+-
+-        writer.flush();
+-        writer.close();
+-    }
+-
+-    public boolean contains(Integer vkId) {
+-        return MEMBERS.contains(vkId);
+-    }
+-
+-    public Set<Integer> getIds() {
+-        return MEMBERS;
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/Statistic.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/Statistic.java
+deleted file mode 100644
+index 61d8199..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/Statistic.java
++++ /dev/null
+@@ -1,36 +0,0 @@
+-package com.vk.api.examples.youtrack.storage;
+-
+-import java.util.HashMap;
+-import java.util.Map;
+-
+-/**
+- * Created by tsivarev on 01.05.16.
+- */
+-public class Statistic {
+-
+-    private static final Map<Event, Integer> EVENTS = new HashMap<>();
+-
+-    public synchronized static void increment(Event event) {
+-        if (EVENTS.containsKey(event)) {
+-            Integer count = EVENTS.get(event);
+-            EVENTS.put(event, count + 1);
+-        } else {
+-            EVENTS.put(event, 1);
+-        }
+-    }
+-
+-    public synchronized static int get(Event event) {
+-        if (EVENTS.containsKey(event)) {
+-            return EVENTS.get(event);
+-        }
+-
+-        return 0;
+-    }
+-
+-    public enum Event {
+-        USER_LOAD,
+-        SEND_NOTIFY,
+-        COMMAND,
+-        FAILED_COMMAND,
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingName.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingName.java
+deleted file mode 100644
+index d824529..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingName.java
++++ /dev/null
+@@ -1,30 +0,0 @@
+-package com.vk.api.examples.youtrack.storage.users;
+-
+-/**
+- * Created by tsivarev on 06.05.16.
+- */
+-public enum SettingName {
+-    ISSUE_NOTIFICATION("issue_notification"),
+-    CLOSED_ISSUE_NOTIFICATION("closed_issue_notification");
+-
+-    private String value;
+-
+-    SettingName(String value) {
+-        this.value = value;
+-    }
+-
+-    public static SettingName byValue(String searchValue) {
+-        for (SettingName value : SettingName.values()) {
+-            if (searchValue.equalsIgnoreCase(value.value)) {
+-                return value;
+-            }
+-        }
+-
+-        throw new IllegalArgumentException("Invalid value " + searchValue);
+-    }
+-
+-    @Override
+-    public String toString() {
+-        return value;
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingValue.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingValue.java
+deleted file mode 100644
+index 051e8b4..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/SettingValue.java
++++ /dev/null
+@@ -1,30 +0,0 @@
+-package com.vk.api.examples.youtrack.storage.users;
+-
+-/**
+- * Created by tsivarev on 06.05.16.
+- */
+-public enum SettingValue {
+-    ON("on"),
+-    OFF("off");
+-
+-    private String value;
+-
+-    SettingValue(String value) {
+-        this.value = value;
+-    }
+-
+-    public static SettingValue byValue(String searchValue) {
+-        for (SettingValue value : SettingValue.values()) {
+-            if (searchValue.equalsIgnoreCase(value.value)) {
+-                return value;
+-            }
+-        }
+-
+-        throw new IllegalArgumentException("Invalid value " + searchValue);
+-    }
+-
+-    @Override
+-    public String toString() {
+-        return value;
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUser.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUser.java
+deleted file mode 100644
+index 3e3ada5..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUser.java
++++ /dev/null
+@@ -1,45 +0,0 @@
+-package com.vk.api.examples.youtrack.storage.users;
+-
+-import java.util.Map;
+-
+-/**
+- * Created by tsivarev on 06.05.16.
+- */
+-public class YouTrackUser {
+-
+-    private Integer vkId;
+-
+-    private String ytLogin;
+-
+-    private Map<SettingName, SettingValue> settings;
+-
+-    public YouTrackUser(Integer vkId, String ytLogin, Map<SettingName, SettingValue> settings) {
+-        this.vkId = vkId;
+-        this.ytLogin = ytLogin;
+-        this.settings = settings;
+-    }
+-
+-    public Integer getVkId() {
+-        return vkId;
+-    }
+-
+-    public String getYtLogin() {
+-        return ytLogin;
+-    }
+-
+-    public Map<SettingName, SettingValue> getSettings() {
+-        return settings;
+-    }
+-
+-    public void setSettings(Map<SettingName, SettingValue> settings) {
+-        this.settings = settings;
+-    }
+-
+-    public SettingValue getSettingValue(SettingName name) {
+-        if (!settings.containsKey(name)) {
+-            return SettingValue.ON;
+-        }
+-
+-        return settings.get(name);
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUsersStorage.java b/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUsersStorage.java
+deleted file mode 100644
+index dcdc2c6..0000000
+--- a/examples/youtrack-bot/src/main/java/com/vk/api/examples/youtrack/storage/users/YouTrackUsersStorage.java
++++ /dev/null
+@@ -1,188 +0,0 @@
+-package com.vk.api.examples.youtrack.storage.users;
+-
+-import com.vk.api.examples.youtrack.storage.Statistic;
+-import org.apache.commons.lang3.StringUtils;
+-import org.apache.logging.log4j.LogManager;
+-import org.apache.logging.log4j.Logger;
+-
+-import java.io.BufferedReader;
+-import java.io.FileReader;
+-import java.io.FileWriter;
+-import java.io.IOException;
+-import java.util.Arrays;
+-import java.util.Collections;
+-import java.util.HashMap;
+-import java.util.HashSet;
+-import java.util.Map;
+-import java.util.Set;
+-
+-/**
+- * Created by tsivarev on 29.04.16.
+- */
+-public class YouTrackUsersStorage {
+-
+-    private static final Logger LOG = LogManager.getLogger(YouTrackUsersStorage.class);
+-    private static final Map<String, YouTrackUser> USERS = new HashMap<>();
+-    private static YouTrackUsersStorage instance;
+-    private String filePath;
+-
+-    private YouTrackUsersStorage() {
+-    }
+-
+-    public static YouTrackUsersStorage getInstance() {
+-        if (instance == null) {
+-            instance = new YouTrackUsersStorage();
+-        }
+-
+-        return instance;
+-    }
+-
+-    private static Map<SettingName, SettingValue> deserializeSettings(String settings) {
+-        Map<SettingName, SettingValue> map = new HashMap<>();
+-        Set<String> settingValues = new HashSet<>(Arrays.asList(StringUtils.split(settings, "&")));
+-        for (String setting : settingValues) {
+-            if (setting.isEmpty()) {
+-                throw new IllegalStateException("Wrong setting: " + setting);
+-            }
+-
+-            String[] values = StringUtils.split(setting, "=");
+-
+-            try {
+-                map.put(SettingName.byValue(values[0]), SettingValue.byValue(values[1]));
+-            } catch (IllegalArgumentException e) {
+-                throw new IllegalStateException("Wrong values: " + setting);
+-            }
+-        }
+-
+-        return map;
+-    }
+-
+-    private static String serializeSettings(Map<SettingName, SettingValue> map) {
+-        Set<String> values = new HashSet<>();
+-        for (Map.Entry<SettingName, SettingValue> entry : map.entrySet()) {
+-            values.add(entry.getKey() + "=" + entry.getValue());
+-        }
+-
+-        return StringUtils.join(values, "&");
+-    }
+-
+-    public YouTrackUser getUserByLogin(String name) {
+-        return USERS.get(name);
+-    }
+-
+-    public YouTrackUser getUserById(Integer userId) {
+-        for (Map.Entry<String, YouTrackUser> entry : USERS.entrySet()) {
+-            if (entry.getValue().getVkId().equals(userId)) {
+-                return entry.getValue();
+-            }
+-        }
+-
+-        return null;
+-    }
+-
+-    public Set<Integer> getIds() {
+-        Set<Integer> ids = new HashSet<>();
+-
+-        for (Map.Entry<String, YouTrackUser> entry : USERS.entrySet()) {
+-            ids.add(entry.getValue().getVkId());
+-        }
+-
+-        return ids;
+-    }
+-
+-    public void load(String path) {
+-        LOG.info("Load data from " + path);
+-
+-        filePath = path;
+-
+-        BufferedReader br = null;
+-        String line;
+-
+-
+-        try {
+-            br = new BufferedReader(new FileReader(filePath));
+-            while ((line = br.readLine()) != null) {
+-                deserializeLine(line);
+-            }
+-
+-        } catch (Exception e) {
+-            LOG.error("Can't load " + filePath, e);
+-        } finally {
+-            if (br != null) {
+-                try {
+-                    br.close();
+-                } catch (IOException e) {
+-                    LOG.error("Can't close stream for " + filePath);
+-                }
+-            }
+-        }
+-
+-
+-        LOG.info("Loaded " + USERS.size() + " users");
+-    }
+-
+-    private void deserializeLine(String line) {
+-        String cvsSplitBy = ",";
+-
+-        String[] values = line.split(cvsSplitBy);
+-        if (values.length < 2) {
+-            throw new IllegalStateException("Wrong line: " + line);
+-        }
+-
+-        Statistic.increment(Statistic.Event.USER_LOAD);
+-        String ytLogin = values[0];
+-        Integer vkId = Integer.valueOf(values[1]);
+-        Map<SettingName, SettingValue> settings = deserializeSettings(values.length >= 3 ? values[2] : "");
+-
+-        YouTrackUser youTrackUser = new YouTrackUser(vkId, ytLogin, settings);
+-        USERS.put(ytLogin, youTrackUser);
+-    }
+-
+-    private String serializeLine(YouTrackUser youTrackUser) {
+-        return youTrackUser.getYtLogin() + "," + youTrackUser.getVkId() + "," + serializeSettings(youTrackUser.getSettings()) + "\n";
+-    }
+-
+-    public void add(String login, Integer userId) throws IOException {
+-        if (getUserById(userId) != null || getUserByLogin(login) != null) {
+-            return;
+-        }
+-
+-        YouTrackUser youTrackUser = new YouTrackUser(userId, login, Collections.emptyMap());
+-        USERS.put(login, youTrackUser);
+-        LOG.info("Add new user " + login + "/" + userId);
+-
+-        save();
+-    }
+-
+-    public void remove(Integer userId) throws IOException {
+-        YouTrackUser user = getUserById(userId);
+-        if (user == null) {
+-            return;
+-        }
+-
+-        USERS.remove(user.getYtLogin());
+-        LOG.info("Delete user " + userId);
+-
+-        save();
+-    }
+-
+-    private void save() throws IOException {
+-        FileWriter writer = new FileWriter(filePath);
+-        for (Map.Entry<String, YouTrackUser> entry : USERS.entrySet()) {
+-            writer.append(serializeLine(entry.getValue()));
+-        }
+-
+-        writer.flush();
+-        writer.close();
+-
+-        LOG.info("YouTrackUsersStorage config updated");
+-    }
+-
+-    public void updateSettings(YouTrackUser youTrackUser) throws IOException {
+-        save();
+-    }
+-
+-    public int getCount() {
+-        return USERS.size();
+-    }
+-}
+diff --git a/examples/youtrack-bot/src/main/resources/config.properties b/examples/youtrack-bot/src/main/resources/config.properties
+deleted file mode 100644
+index 44c2b9f..0000000
+--- a/examples/youtrack-bot/src/main/resources/config.properties
++++ /dev/null
+@@ -1,21 +0,0 @@
+-#Credentionals for YT Bot
+-yt.login=@yt.login@
+-yt.password=@yt.password@
+-yt.host=@yt.host@
+-#Http client
+-http.keystore.type=@http.keystore.type@
+-http.keystore.path=@http.keystore.path@
+-http.keystore.password=@http.keystore.password@
+-http.key.password=@http.key.password@
+-http.truststore.type=@http.truststore.type@
+-http.truststore.path=@http.truststore.path@
+-http.truststore.password=@http.truststore.password@
+-#Credentionals for VK Bot
+-vk.group.id=@vk.group.id@
+-vk.group.token=@vk.group.token@
+-#Server settings
+-server.host=@server.host@
+-server.port=@server.port@
+-#Settings
+-version=@version@
+-data.global=@data.global@
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/main/resources/lang.properties b/examples/youtrack-bot/src/main/resources/lang.properties
+deleted file mode 100644
+index dde1de0..0000000
+--- a/examples/youtrack-bot/src/main/resources/lang.properties
++++ /dev/null
+@@ -1 +0,0 @@
+-welcome=send your yt login!
+\ No newline at end of file
+diff --git a/examples/youtrack-bot/src/test/java/com/vk/api/examples/youtrack/ParseJsonTest.java b/examples/youtrack-bot/src/test/java/com/vk/api/examples/youtrack/ParseJsonTest.java
+deleted file mode 100644
+index a41aae7..0000000
+--- a/examples/youtrack-bot/src/test/java/com/vk/api/examples/youtrack/ParseJsonTest.java
++++ /dev/null
+@@ -1,29 +0,0 @@
+-package com.vk.api.examples.youtrack;
+-
+-import com.google.gson.Gson;
+-import com.google.gson.JsonObject;
+-import com.google.gson.reflect.TypeToken;
+-import com.vk.api.sdk.callback.objects.CallbackMessage;
+-import com.vk.api.sdk.callback.objects.CallbackMessageType;
+-import org.testng.Assert;
+-import org.testng.annotations.Test;
+-
+-import java.lang.reflect.Type;
+-
+-/**
+- * Created by Anton Tsivarev on 10.09.16.
+- */
+-public class ParseJsonTest {
+-
+-    @Test
+-    public void testCallback() {
+-        Gson gson = new Gson();
+-        String json = "{\"type\":\"confirmation\",\"group_id\":1}";
+-        Type typeOfClass = new TypeToken<CallbackMessage<JsonObject>>() {
+-        }.getType();
+-        CallbackMessage<JsonObject> callback = gson.fromJson(json, typeOfClass);
+-        Assert.assertNotNull(callback);
+-        Assert.assertEquals(callback.getType(), CallbackMessageType.CONFIRMATION);
+-        Assert.assertEquals(callback.getGroupId(), new Integer(1));
+-    }
+-}
+diff --git a/examples/youtrack-bot/template.properties b/examples/youtrack-bot/template.properties
+deleted file mode 100644
+index b549b77..0000000
+--- a/examples/youtrack-bot/template.properties
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#Credentionals for YT Bot
+-ytLogin=youtrack bot login
+-ytPassword=youtrack bot password
+-ytHost=youtrack host
+-#Http client configuration
+-httpKeyStoreType=type of keystore
+-httpKeyStorePath=absolute path to keystore
+-httpKeyStorePassword=password for keystore
+-httpKeyPassword=password for key in keystore
+-httpTrustStoreType=type of truststore
+-httpTrustStorePath=absolute path to truststore
+-httpTrustStorePassword=password for truststore
+-#Credentionals for VK Bot
+-vkGroupId=group id
+-vkGroupToken=group access token
+-#Server settings
+-serverHost=server host for callback api
+-serverPort=server port for callback api
+-#Settings
+-dataPath=absolute path to data directory
+\ No newline at end of file
+diff --git a/sdk/src/main/java/com/vk/api/sdk/objects/base/Place.java b/sdk/src/main/java/com/vk/api/sdk/objects/base/Place.java
+index 9d633f7..a504118 100644
+--- a/sdk/src/main/java/com/vk/api/sdk/objects/base/Place.java
++++ b/sdk/src/main/java/com/vk/api/sdk/objects/base/Place.java
+@@ -60,13 +60,13 @@ public class Place {
+      * Country ID
+      */
+     @SerializedName("country")
+-    private Integer country;
++    private String country;
+ 
+     /**
+      * City ID
+      */
+     @SerializedName("city")
+-    private Integer city;
++    private String city;
+ 
+     /**
+      * Place address
+@@ -106,11 +106,11 @@ public class Place {
+         return type;
+     }
+ 
+-    public Integer getCountry() {
++    public String getCountry() {
+         return country;
+     }
+ 
+-    public Integer getCity() {
++    public String getCity() {
+         return city;
+     }
+ 
+-- 
+2.7.4
+
