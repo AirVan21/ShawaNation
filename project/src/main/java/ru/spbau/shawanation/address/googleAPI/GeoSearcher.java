@@ -3,6 +3,7 @@ package ru.spbau.shawanation.address.googleAPI;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import ru.spbau.shawanation.database.PlaceCoordinates;
+import ru.spbau.shawanation.utils.GoogleAPIKeys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +14,7 @@ import java.util.stream.Collectors;
  * GeoSearcher is a class for converting string address to formatted address via GoogleAPI
  */
 public class GeoSearcher {
-    private static final String GEO_API_CODE = "AIzaSyBPGuEnVZcQarLwzByVquiP4D-lmc2Q9OY";
-    private static final GeoApiContext geoContext = new GeoApiContext().setApiKey(GEO_API_CODE);
+    private static final GeoApiContext geoContext = new GeoApiContext().setApiKey(GoogleAPIKeys.GEO_API_CODE);
 
     public static List<PlaceCoordinates> getCityCoordinates(String location) {
         List<PlaceCoordinates> coordinates = new ArrayList<>();
