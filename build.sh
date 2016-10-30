@@ -16,4 +16,4 @@ mkdir -p ../project/libs
 mv sdk/build/libs/sdk* ../project/libs
 # build and package project
 cd ../project
-gradle shadowJar
+gradle build
