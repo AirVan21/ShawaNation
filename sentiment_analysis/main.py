@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from argparse import ArgumentParser
 import os
 from os import makedirs
@@ -28,16 +30,37 @@ def word2_vec_model(trimmed_dict):
     return text_2_id
 
 
-def preprocess_text(text, word2_vec_model):
-    return word2_vec_model(text)
+def calc_sentiment(Keras_model, text_2_id, text):
+    input_len = Keras_model.layers[0].input_shape[1] # 200
+    vec_id = text_2_id(text)
+    if len(vec_id) < input_len:
+        vec_id_tmp = np.zeros((1, input_len))
+        vec_id_tmp[:,:len(vec_id)] = np.array(vec_id).reshape((1, len(vec_id)))
+        vec_id = vec_id_tmp
+    begin_i = 0
+    end_i = min(len(vec_id), input_len)
+    sentiment_res = []
+    while end_i <= len(vec_id):
+        text_df = np.array(vec_id[begin_i:end_i]).reshape((1, input_len))
+        sent = Keras_model.predict(text_df, batch_size=1)[0][0]
+        sentiment_res += [sent]
+        if end_i == len(vec_id):
+            break
+        end_i = min(end_i + input_len, len(vec_id))
+        begin_i = end_i - input_len
+    if len(sentiment_res) > 1:
+        sentiment_res[-2] = (sentiment_res[-2] + sentiment_res[-1]) / 2
+        del sentiment_res[-1]
+    return np.array(sentiment_res).mean()
 
 
-def process_file(file_name, output_path, word2_vec_model, sentiment_model, batch_size=80):
+def process_file(file_name, output_path, word2_vec_model, sentiment_model):
     with open(file_name, 'r') as f:
-        df = preprocess_text(f.readlines(), word2_vec_model)
-        res = sentiment_model.predict(df, batch_size=batch_size)
+        text = " ".join(f.readlines())
+        res = calc_sentiment(sentiment_model, word2_vec_model, text)
+    print(res)
     with open(output_path, 'w+') as f:
-        f.write(res)
+        f.write(str(res))
 
 
 def main():
@@ -84,8 +107,7 @@ def main():
     with open(args.word2vec_model, 'r') as f:
         trimmed_dict = load(f)
 
-    with open(args.sentiment_model, 'r') as f:
-        sentiment_model = load_model(f)
+    sentiment_model = load_model(args.sentiment_model)
 
     for file_name, output_path in zip(files, output_paths):
         process_file(file_name, output_path, word2_vec_model(trimmed_dict), sentiment_model)
