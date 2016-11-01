@@ -127,8 +127,6 @@ public class GISCrawler implements Crawler {
 
     @Override
     public List<Post> getPosts() {
-        int curPage = 1;
-
         HttpResponse<JsonNode> httpResponse = null;
         /* Make first request to get amount of results */
         try {
@@ -148,7 +146,7 @@ public class GISCrawler implements Crawler {
         int itemsCount = response.getJSONObject("result").getInt("total");
 
         // Iterate over pages of search result (50 items per page)
-        for (int page = 0; page * 50 < itemsCount; page += 50) {
+        for (int page = 0; page * 50 < itemsCount; page += 1) {
             try {
                 httpResponse = Unirest.get(SEARCH_QUERY)
                         .queryString("key", AUTH_KEY)
