@@ -7,8 +7,11 @@ import org.mongodb.morphia.annotations.Id;
 import ru.spbau.shawanation.address.googleAPI.GeoSearcher;
 import ru.spbau.shawanation.address.utils.SimpleSearcher;
 import ru.spbau.shawanation.utils.GlobalLogger;
+import ru.spbau.shawanation.utils.TextTranslator;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Post is class which describes wall record from vk.com
@@ -18,22 +21,25 @@ public class Post {
     @Id
     private ObjectId postId;
     private String text = "";
+    private String translatedText = "";
+    private double mark = 0.0;
+    private double sentimentMark = 0.0;
+    private PlaceCoordinates coordinates;
+
+    public Post() {}
 
     public Post(String text, Double mark, PlaceCoordinates coordinates) {
         this.text = text;
         this.mark = mark;
         this.coordinates = coordinates;
+        updateTranslatedText();
     }
-
-    private Double mark = 0.0;
-    private PlaceCoordinates coordinates;
-
-    public Post() {}
 
     public Post(WallpostFull post) {
         text = post.getText();
-        updatePlaceCoordinates(text);
-        updateMark(text);
+        updateTranslatedText();
+        updatePlaceCoordinates();
+        updateMark();
     }
 
     public String getText() {
@@ -46,6 +52,22 @@ public class Post {
 
     public Double getMark() {
         return mark;
+    }
+
+    public String getTranslatedText() {
+        return translatedText;
+    }
+
+    public void setTranslatedText(String translatedText) {
+        this.translatedText = translatedText;
+    }
+
+    public double getSentimentMark() {
+        return sentimentMark;
+    }
+
+    public void setSentimentMark(double sentimentMark) {
+        this.sentimentMark = sentimentMark;
     }
 
     @Override
@@ -65,10 +87,10 @@ public class Post {
     }
 
     public boolean isValid() {
-        return coordinates != null && !text.isEmpty();
+        return !text.isEmpty();
     }
 
-    private void updatePlaceCoordinates(String text) {
+    private void updatePlaceCoordinates() {
         final List<String> locations = SimpleSearcher.getLocationFromText(text);
         final int FIRST = 0;
 
@@ -80,16 +102,23 @@ public class Post {
         }
     }
 
-    private void updateMark(String text) {
-        final List<String> marks = SimpleSearcher.getMarkFromText(text);
-        final int FIRST = 0;
+    private void updateMark() {
+        final Optional<String> markString = SimpleSearcher.getMarkFromText(text);
 
-        if (!marks.isEmpty()) {
+        if (markString.isPresent()) {
             try {
-                mark = Double.parseDouble(marks.get(FIRST));
+                 mark = Double.parseDouble(markString.get());
             } catch (NumberFormatException exc) {
-                GlobalLogger.log("Couldn't convert mark: " + marks.get(FIRST));
+                GlobalLogger.log("Couldn't convert mark: " + markString.get());
             }
+        }
+    }
+
+    private void updateTranslatedText() {
+        try {
+            TextTranslator.translate(text, translatedText);
+        } catch (IOException e) {
+            GlobalLogger.log("Post: couldn't translate text");
         }
     }
 }
