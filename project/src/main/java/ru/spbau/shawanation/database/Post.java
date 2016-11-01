@@ -18,6 +18,13 @@ public class Post {
     @Id
     private ObjectId postId;
     private String text = "";
+
+    public Post(String text, Double mark, PlaceCoordinates coordinates) {
+        this.text = text;
+        this.mark = mark;
+        this.coordinates = coordinates;
+    }
+
     private Double mark = 0.0;
     private PlaceCoordinates coordinates;
 

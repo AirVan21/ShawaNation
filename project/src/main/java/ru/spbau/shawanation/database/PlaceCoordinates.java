@@ -100,4 +100,9 @@ public class PlaceCoordinates {
 
         return "";
     }
+
+    public PlaceCoordinates(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 }
