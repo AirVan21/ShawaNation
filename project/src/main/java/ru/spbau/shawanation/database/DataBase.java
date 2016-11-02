@@ -29,10 +29,26 @@ public class DataBase {
         }
     }
 
+    public void addVenue(Venue venue) {
+        if (venue.isValid()) {
+            datastore.save(venue);
+        }
+    }
+
     public List<Post> getPosts() {
         return datastore
                 .find(Post.class)
                 .asList();
+    }
+
+    public List<Venue> getVenues() {
+        return datastore
+                .find(Venue.class)
+                .asList();
+    }
+
+    public void dropCollection(Class source) {
+        datastore.getCollection(source).drop();
     }
 
     public void dropDatabase() {

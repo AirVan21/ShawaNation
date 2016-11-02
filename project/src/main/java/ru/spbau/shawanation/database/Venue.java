@@ -29,4 +29,28 @@ public class Venue {
         this.coordinates = coordinates;
         averageMark = mark;
     }
+
+    public void addPost(Post post) {
+        posts.add(post);
+        if (post.getMark() > 0.0) {
+            averageMark += post.getMark();
+            averageMark /= 2;
+        }
+    }
+
+    public boolean isValid() {
+        return !posts.isEmpty();
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public PlaceCoordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public double getAverageMark() {
+        return averageMark;
+    }
 }
