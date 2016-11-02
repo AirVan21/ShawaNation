@@ -82,5 +82,5 @@ dependencies {
 }
 
 springBoot {
-    mainClass = "u.spbau.shawanation.Application"
+    mainClass = "ru.spbau.shawanation.Application"
 }
