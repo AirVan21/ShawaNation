@@ -80,3 +80,7 @@ dependencies {
     compile group: 'io.github.amaembo', name: 'streamex', version: '0.4.1'
     compile 'org.springframework:spring-context:4.3.3.RELEASE'
 }
+
+springBoot {
+    mainClass = "u.spbau.shawanation.Application"
+}
