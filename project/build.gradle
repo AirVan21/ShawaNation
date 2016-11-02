@@ -37,6 +37,7 @@ ext {
     morphiaVersion = '1.0.1'
     springCoreVersion = '4.3.3.RELEASE'
     springBeansVersion = '4.3.3.RELEASE'
+    googleTranslatorVersion = '0.4.0'
     ossrhUsername = 'user'
     ossrhPassword = 'pwd'
 }
@@ -72,5 +73,10 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot', version: '1.4.1.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.4.1.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '1.4.1.RELEASE'
+    compile group: 'com.google.api-client', name: 'google-api-client-gson', version: '1.22.0'
+    // Unirest - lightweight library for RESTful interaction
+    compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+    // Streamex. Because we like streams!
+    compile group: 'io.github.amaembo', name: 'streamex', version: '0.4.1'
     compile 'org.springframework:spring-context:4.3.3.RELEASE'
 }

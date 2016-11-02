@@ -15,7 +15,6 @@ import java.util.List;
  */
 @Service
 public class DataBase {
-
     private Datastore datastore;
 
     public DataBase(@Value("${mongo.dbName}") String datastoreName,
@@ -25,13 +24,35 @@ public class DataBase {
     }
 
     public void addPost(Post post) {
-        datastore.save(post);
+        if (post.isValid()) {
+            datastore.save(post);
+        }
+    }
+
+    public void addVenue(Venue venue) {
+        if (venue.isValid()) {
+            datastore.save(venue);
+        }
     }
 
     public List<Post> getPosts() {
         return datastore
                 .find(Post.class)
                 .asList();
+    }
+
+    public List<Venue> getVenues() {
+        return datastore
+                .find(Venue.class)
+                .asList();
+    }
+
+    public void dropCollection(Class source) {
+        datastore.getCollection(source).drop();
+    }
+
+    public void dropDatabase() {
+        datastore.getDB().dropDatabase();
     }
 
     @Bean

@@ -26,8 +26,10 @@ public class Application implements CommandLineRunner {
             System.out.println("Not enough arguments - provide search query, please");
             return;
         }
+
         searchEngineService.getClosest(args[0], 10).stream()
-                .map(c -> String.format("%s: %s,%s\n", c.getFormattedAddress(), c.getLat(), c.getLng()))
+                .filter(item -> !item.getFormattedAddress().isEmpty())
+                .map(item -> String.format("%s: %s,%s\n", item.getFormattedAddress(), item.getLat(), item.getLng()))
                 .forEach(System.out::println);
     }
 

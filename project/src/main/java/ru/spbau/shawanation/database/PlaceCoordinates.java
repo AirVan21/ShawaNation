@@ -18,6 +18,11 @@ public class PlaceCoordinates {
 
     public PlaceCoordinates() {}
 
+    public PlaceCoordinates(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+
     public PlaceCoordinates(GeocodingResult location) {
         lat = location.geometry.location.lat;
         lng = location.geometry.location.lng;
@@ -28,27 +33,13 @@ public class PlaceCoordinates {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
-        sb.append("Formatted address: ");
-        sb.append(formattedAddress);
-        sb.append("\n");
-
-        sb.append("Country: ");
-        sb.append(country);
-        sb.append("\n");
-
-        sb.append("City: ");
-        sb.append(city);
-        sb.append("\n");
-
-        sb.append("Lat: ");
-        sb.append(lat);
-        sb.append("\n");
-
-        sb.append("Lon: ");
-        sb.append(lng);
-        sb.append("\n");
+        sb.append("Formatted address: ").append(formattedAddress).append("\n");
+        sb.append("Country: ").append(country).append("\n");
+        sb.append("City: ").append(city).append("\n");
+        sb.append("Lat: ").append(lat).append("\n");
+        sb.append("Lon: ").append(lng).append("\n");
 
         return sb.toString();
     }
@@ -74,7 +65,7 @@ public class PlaceCoordinates {
     }
 
     /**
-     * Calculate distance between two points in latitude and longitude taking
+     * Calculate distance (in meters) between two points in latitude and longitude taking
      * into account height difference.
      */
     public Double getDistance(double inputLat, double inputLng) {
