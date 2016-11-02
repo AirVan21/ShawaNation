@@ -70,9 +70,11 @@ public class GISCrawler implements Crawler {
             return;
         }
 
-        collectReviews(coords, reviewsHttpResponse.getBody().getObject());
+        // Some venues doesn't have any reviews and 2GIS Reviews API returns "404"-response
+        if (reviewsHttpResponse.getBody().getObject().has("result")) {
+            collectReviews(coords, reviewsHttpResponse.getBody().getObject());
+        }
     }
-
     private void collectReviews(PlaceCoordinates coords, JSONObject curResponse) {
         // 2GIS sends link to the next page of reviews in the response itself. How convenient!
         String nextLink = curResponse.getJSONObject("result").getString("next_link").replace("https", "http");
@@ -143,6 +145,9 @@ public class GISCrawler implements Crawler {
             return null;
         }
         JSONObject response = httpResponse.getBody().getObject();
+        if (!response.has("result")) {
+            throw new IllegalArgumentException("Wrong response");
+        }
         int itemsCount = response.getJSONObject("result").getInt("total");
 
         // Iterate over pages of search result (50 items per page)
