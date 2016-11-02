@@ -29,12 +29,11 @@ public class GeoSearcher {
     }
 
     private static List<PlaceCoordinates> requestPlaceCoordinates(String location) throws Exception {
-        List<PlaceCoordinates> geoInformation = Arrays.stream(GeocodingApi
+
+        return Arrays.stream(GeocodingApi
                 .geocode(geoContext, location)
                 .await())
                 .map(PlaceCoordinates::new)
                 .collect(Collectors.toList());
-
-        return geoInformation;
     }
 }
