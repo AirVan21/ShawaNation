@@ -17,7 +17,7 @@ angular.module('shawa-core', [])
       responseType: 'text',
       transformResponse: undefined
     }).then(function successCallback(response) {
-      result = response.data.split("\n")
+      result = response.data.split("<br>")
     }, function errorCallback(response) {
       result = response.statusText;
     });
