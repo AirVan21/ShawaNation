@@ -138,7 +138,7 @@ public class Corrector {
     private List<String> parse2GisCorrection(HttpResponse<JsonNode> geoResponse) throws InvalidApiResponse {
         JSONObject body = geoResponse.getBody().getObject();
         if (body.getJSONObject("meta").getInt("code") != 200) {
-            // No results is OK
+            // No results is not an exceptional situation
             if (body.getJSONObject("meta").getJSONObject("error").getString("type").equals("itemNotFound")) {
                 return Collections.emptyList();
             }

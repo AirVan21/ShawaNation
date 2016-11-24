@@ -2,6 +2,7 @@ package ru.spbau.shawanation.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.spbau.shawanation.correction.Corrector;
 import ru.spbau.shawanation.database.PlaceCoordinates;
 import ru.spbau.shawanation.database.Venue;
 import ru.spbau.shawanation.services.SearchEngineService;
@@ -19,11 +20,24 @@ public class SearchEngineController {
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
     String getClosest(@RequestParam(value = "text") String queryText) {
-        List<Venue> coordinates = searchEngineService.getClosest(queryText, 10);
+        Corrector corrector = new Corrector();
+        String correctedQuery = corrector.getCorrection(queryText);
+        String correctionMessage;
+        if (correctedQuery == null) {
+            correctionMessage = "No suggestions, try to reformulate your query.<br>";
+            correctedQuery = queryText; // try to find using primary query nevertheless
+        } else if (correctedQuery.equals(queryText)) {
+            correctionMessage = "";
+        } else {
+            correctionMessage = "Maybe you looked for: '" + correctedQuery + "'<br>";
+        }
+
+        List<Venue> coordinates = searchEngineService.getClosest(correctedQuery, 10);
         return coordinates.stream()
                 .map(c -> String.format("<h4> %s </h4> <b> Mark = %s </b>, %s, %s <br> %s", c.getCoordinates().getFormattedAddress(),
                         c.getAverageMark(), c.getCoordinates().getLat(), c.getCoordinates().getLng(), getHtml(c)))
-                .collect(Collectors.joining());
+                .collect(Collectors.joining())
+                + correctionMessage;
     }
 
     private String getHtml(Venue venue) {
