@@ -11,15 +11,17 @@ public class ProcessedPost {
     private ObjectId postId;
     private String text = "";
     private String translatedText = "";
-    private double mark;
+    private double originalMark = 0;
+    private double sentimentMark = 0;
+    private double mixedMark = 0;
+
     private PlaceCoordinates coordinates;
 
     public ProcessedPost() {}
 
-    public ProcessedPost(String text, String translatedText, double mark, PlaceCoordinates coordinates) {
+    public ProcessedPost(String text, String translatedText, PlaceCoordinates coordinates) {
         this.text = text;
         this.translatedText = translatedText;
-        this.mark = mark;
         this.coordinates = coordinates;
     }
 }
