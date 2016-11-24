@@ -41,6 +41,30 @@ public class DataBase {
                 .asList();
     }
 
+    public List<Post> getVKPosts() {
+        return datastore
+                .find(Post.class)
+                .field("type")
+                .equal(Post.PostType.VK)
+                .asList();
+    }
+
+    public List<Post> getGISPosts() {
+        return datastore
+                .find(Post.class)
+                .field("type")
+                .equal(Post.PostType.GIS)
+                .asList();
+    }
+
+    public List<Post> getSquarePosts() {
+        return datastore
+                .find(Post.class)
+                .field("type")
+                .equal(Post.PostType.SQUARE)
+                .asList();
+    }
+
     public List<Venue> getVenues() {
         return datastore
                 .find(Venue.class)

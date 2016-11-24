@@ -21,41 +21,41 @@ public class SearchEngineService {
     @Autowired
     private DataBase db;
 
-    public List<PlaceCoordinates> getClosest(String address, int count) {
+    public List<Venue> getClosest(String address, int count) {
         final List<PlaceCoordinates> current = GeoSearcher.getCityCoordinates(address);
         if (current.isEmpty()) {
             return new ArrayList<>();
         }
-
         final double lat = current.get(0).getLat();
         final double lng = current.get(0).getLng();
-        final Comparator<PlaceCoordinates> byDistance = (placeOne, placeTwo) ->
-                placeOne.getDistance(lat, lng).compareTo(placeTwo.getDistance(lat, lng));
-
+        final Comparator<Venue> byDistance = (placeOne, placeTwo) ->
+                placeOne.getCoordinates().getDistance(lat, lng).compareTo(placeTwo.getCoordinates().getDistance(lat, lng));
         return db.getVenues()
                 .stream()
-                .map(Venue::getCoordinates)
-                .distinct()
                 .sorted(byDistance)
                 .limit(count)
                 .collect(Collectors.toList());
     }
 
     public void fillDatabase() {
-        db.dropDatabase();
-
         loadDataFromCrawler(new VKCrawler());
         loadDataFromCrawler(new GISCrawler());
-        // Should be filtered
-//        loadDataFromCrawler(new FoursquareCrawler());
+        loadDataFromCrawler(new FoursquareCrawler());
     }
 
     public void storeVenues() {
-        db.dropCollection(Venue.class);
         final List<Venue> venues = buildVenues();
         venues.forEach(venue -> db.addVenue(venue));
     }
 
+    public void dropCollection(Class collection) {
+        db.dropCollection(collection);
+    }
+
+    /**
+     * Rewrite
+     * @return
+     */
     private List<Venue> buildVenues() {
         List<Post> posts = db.getPosts();
         Set<ObjectId> usedPosts = new HashSet<>();
@@ -71,7 +71,6 @@ public class SearchEngineService {
             posts
                     .stream()
                     .filter(item -> !usedPosts.contains(item.getPostId()))
-                    .filter(item -> item.isRelated(post))
                     .forEach(item -> {
                             usedPosts.add(item.getPostId());
                             venue.addPost(item);
@@ -85,10 +84,5 @@ public class SearchEngineService {
     private void loadDataFromCrawler(Crawler crawler) {
         final List<Post> posts = crawler.getPosts();
         posts.forEach(db::addPost);
-    }
-
-    public void showVenues() {
-        List<Venue> venues = db.getVenues();
-        venues.forEach(venue -> System.out.println(venue.getCoordinates()));
     }
 }

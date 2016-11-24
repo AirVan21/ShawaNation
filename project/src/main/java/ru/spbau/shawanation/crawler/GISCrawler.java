@@ -96,7 +96,7 @@ public class GISCrawler implements Crawler {
 
             // Finally, place a new Post in the buffer
             // Note that we multiply rating by 2 to convert from 5-max to the 10-max scale.
-            posts.add(new Post(text, (double) rating * 2, coords));
+            posts.add(new Post(text, (double) rating * 2, coords, Post.PostType.GIS));
         }
 
         // get next response

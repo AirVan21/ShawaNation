@@ -6,22 +6,31 @@ import org.mongodb.morphia.annotations.Id;
 
 
 /**
- * Post is class which describes wall record from vk.com
+ * Post is class which describes simple post
  */
 @Entity("Post")
 public class Post {
+    public enum PostType {
+        VK,
+        GIS,
+        SQUARE
+    }
+
     @Id
     private ObjectId postId;
     private String text = "";
     private double mark;
     private PlaceCoordinates coordinates;
+    private PostType type;
+
 
     public Post() {}
 
-    public Post(String text, Double mark, PlaceCoordinates coordinates) {
+    public Post(String text, Double mark, PlaceCoordinates coordinates, PostType type) {
         this.text = text;
         this.mark = (mark == null || mark.isNaN()) ? 0.0 : mark;
         this.coordinates = (coordinates == null) ? new PlaceCoordinates() : coordinates;
+        this.type = type;
     }
 
     public ObjectId getPostId() {
@@ -32,24 +41,36 @@ public class Post {
         return text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public PlaceCoordinates getCoordinates() {
         return coordinates;
+    }
+
+    public void setCoordinates(PlaceCoordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public Double getMark() {
         return mark;
     }
 
-    public boolean isValid() {
-        return !text.isEmpty() && coordinates != null;
+    public void setMark(double mark) {
+        this.mark = mark;
     }
 
-    public boolean isRelated(Post other) {
-        // Distance in meters
-        final double aggregateDistance = 50;
-        PlaceCoordinates otherCoordinates = other.getCoordinates();
+    public PostType getType() {
+        return type;
+    }
 
-        return coordinates.getDistance(otherCoordinates.getLat(), otherCoordinates.getLng()) < aggregateDistance;
+    public void setType(PostType type) {
+        this.type = type;
+    }
+
+    public boolean isValid() {
+        return !text.isEmpty();
     }
 
     @Override

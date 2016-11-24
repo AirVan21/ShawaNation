@@ -116,7 +116,7 @@ public class FoursquareCrawler implements Crawler {
         if (tips == null) return;
 
         for (String tipText : tips) {
-            posts.add(new Post(tipText, rating, new PlaceCoordinates(lat, lon)));
+            posts.add(new Post(tipText, rating, new PlaceCoordinates(lat, lon), Post.PostType.SQUARE));
         }
     }
 
