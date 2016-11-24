@@ -5,7 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.PropertySource;
+import ru.spbau.shawanation.database.ProcessedPost;
+import ru.spbau.shawanation.processors.PostProcessor;
 import ru.spbau.shawanation.services.SearchEngineService;
+import ru.spbau.shawanation.utils.Dumper;
+
+import java.io.IOException;
 
 /**
  * Main class
@@ -17,7 +22,7 @@ public class Application implements CommandLineRunner {
     private SearchEngineService searchEngineService;
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException, ClassNotFoundException {
         if (args.length == 0) {
             System.out.println("Not enough arguments - provide search query, please");
             return;

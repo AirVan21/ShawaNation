@@ -29,6 +29,10 @@ public class DataBase {
         }
     }
 
+    public void addProcessedPost(ProcessedPost post) {
+        datastore.save(post);
+    }
+
     public void addVenue(Venue venue) {
         if (venue.isValid()) {
             datastore.save(venue);
@@ -62,6 +66,12 @@ public class DataBase {
                 .find(Post.class)
                 .field("type")
                 .equal(Post.PostType.SQUARE)
+                .asList();
+    }
+
+    public List<ProcessedPost> getProcessedPosts() {
+        return datastore
+                .find(ProcessedPost.class)
                 .asList();
     }
 

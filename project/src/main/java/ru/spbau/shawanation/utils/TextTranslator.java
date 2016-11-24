@@ -17,15 +17,15 @@ public class TextTranslator {
     private final static String FREE_YANDEX_KEY = "key=trnsl.1.1.20150627T071448Z.117dacaac1e63b79.6b1b4bb84635161fcd400dace9fb2220d6f344ef";
     private final static String REQUEST_METHOD = "POST";
     private final static String ENCODING = "UTF-8";
+    private final static String TARGET_LANGUAGE = "en";
 
     /**
      * Translates input text to target language
-     * @param targetLanguage - language to which we should translate
      * @param text - source text
      * @return translated text
      * @throws IOException
      */
-    public static String translate(String text, String targetLanguage) throws IOException {
+    public static String translate(String text) throws IOException {
         // Builds URL
         StringBuilder sb = new StringBuilder();
         sb.append(ADDRESS);
@@ -38,7 +38,7 @@ public class TextTranslator {
         // Builds request
         DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
         dataOutputStream.writeBytes("text=" + URLEncoder.encode(text, ENCODING));
-        dataOutputStream.writeBytes("&lang=" + targetLanguage);
+        dataOutputStream.writeBytes("&lang=" + TARGET_LANGUAGE);
         dataOutputStream.flush();
         // Returns result
         return parseOutput(connection.getInputStream());

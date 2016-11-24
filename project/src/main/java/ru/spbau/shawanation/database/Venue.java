@@ -12,28 +12,28 @@ import java.util.List;
 @Entity("Venue")
 public class Venue {
     @Reference
-    private List<Post> posts = new ArrayList<>();
+    private List<ProcessedPost> posts = new ArrayList<>();
     private PlaceCoordinates coordinates = new PlaceCoordinates();
     private double averageMark = 0;
 
     public Venue() {}
 
-    public Venue(Post post) {
+    public Venue(ProcessedPost post) {
         posts.add(post);
         coordinates = post.getCoordinates();
-        averageMark = post.getMark();
+        averageMark = post.getOriginalMark();
     }
 
-    public Venue(List<Post> posts, PlaceCoordinates coordinates, double mark) {
+    public Venue(List<ProcessedPost> posts, PlaceCoordinates coordinates, double mark) {
         this.posts = posts;
         this.coordinates = coordinates;
         averageMark = mark;
     }
 
-    public void addPost(Post post) {
+    public void addPost(ProcessedPost post) {
         posts.add(post);
-        if (post.getMark() > 0.0) {
-            averageMark += post.getMark();
+        if (post.getOriginalMark() > 0.0) {
+            averageMark += post.getOriginalMark();
             averageMark /= 2;
         }
     }
@@ -42,7 +42,7 @@ public class Venue {
         return !posts.isEmpty();
     }
 
-    public List<Post> getPosts() {
+    public List<ProcessedPost> getPosts() {
         return posts;
     }
 

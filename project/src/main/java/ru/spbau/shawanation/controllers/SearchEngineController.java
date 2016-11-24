@@ -20,6 +20,7 @@ public class SearchEngineController {
     @ResponseBody
     String getClosest(@RequestParam(value = "text") String queryText) {
         List<Venue> coordinates = searchEngineService.getClosest(queryText, 10);
+        
         return coordinates.stream()
                 .map(c -> String.format("<h4> %s </h4> <b> Mark = %s </b>, %s, %s <br> %s", c.getCoordinates().getFormattedAddress(),
                         c.getAverageMark(), c.getCoordinates().getLat(), c.getCoordinates().getLng(), getHtml(c)))
