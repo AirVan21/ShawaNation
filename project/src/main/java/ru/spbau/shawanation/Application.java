@@ -5,10 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.PropertySource;
-import ru.spbau.shawanation.database.ProcessedPost;
-import ru.spbau.shawanation.processors.PostProcessor;
 import ru.spbau.shawanation.services.SearchEngineService;
-import ru.spbau.shawanation.utils.Dumper;
+
 
 import java.io.IOException;
 

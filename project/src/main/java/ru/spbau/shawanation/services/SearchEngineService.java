@@ -19,19 +19,24 @@ public class SearchEngineService {
     private DataBase db;
 
     public List<Venue> getClosest(String address, int count) {
-        final Optional<PlaceCoordinates> current = GeoSearcher.getLocalCityCoordinates(address);
-        if (!current.isPresent()) {
-            return new ArrayList<>();
+        List<PlaceCoordinates> current = GeoSearcher.getCityCoordinates(address);
+        if (current.size() > 0) {
+            return chooseClosest(current, count);
         }
-        final double lat = current.get().getLat();
-        final double lng = current.get().getLng();
-        final Comparator<Venue> byDistance = (placeOne, placeTwo) ->
-                placeOne.getCoordinates().getDistance(lat, lng).compareTo(placeTwo.getCoordinates().getDistance(lat, lng));
-        return db.getVenues()
-                .stream()
-                .sorted(byDistance)
-                .limit(count)
-                .collect(Collectors.toList());
+
+        // Try 2GIS Transport then
+        current = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getTransportCoord(address);
+        if (current.size() > 0) {
+            return chooseClosest(current, count);
+        }
+
+        // Finally, try 2GIS Geocoding
+        current = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getGeoCoord(address);
+        if (current.size() > 0) {
+            return chooseClosest(current, count);
+        }
+
+        return Collections.emptyList();
     }
 
     public void fillDatabase() {
@@ -47,6 +52,18 @@ public class SearchEngineService {
 
     public void dropCollection(Class collection) {
         db.dropCollection(collection);
+    }
+
+    private List<Venue> chooseClosest(List<PlaceCoordinates> current, int count) {
+        final double lat = current.get(0).getLat();
+        final double lng = current.get(0).getLng();
+        final Comparator<Venue> byDistance = (placeOne, placeTwo) ->
+                placeOne.getCoordinates().getDistance(lat, lng).compareTo(placeTwo.getCoordinates().getDistance(lat, lng));
+        return db.getVenues()
+                .stream()
+                .sorted(byDistance)
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
     private List<Venue> buildVenues() {
