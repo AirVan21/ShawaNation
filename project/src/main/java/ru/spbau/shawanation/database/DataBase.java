@@ -80,7 +80,7 @@ public class DataBase {
                 .find(Venue.class)
                 .asList();
     }
-
+    
     public void dropCollection(Class source) {
         datastore.getCollection(source).drop();
     }

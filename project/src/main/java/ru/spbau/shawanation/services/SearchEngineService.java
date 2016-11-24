@@ -18,27 +18,6 @@ public class SearchEngineService {
     @Autowired
     private DataBase db;
 
-    public List<Venue> getClosest(String address, int count) {
-        List<PlaceCoordinates> current = GeoSearcher.getCityCoordinates(address);
-        if (current.size() > 0) {
-            return chooseClosest(current, count);
-        }
-
-        // Try 2GIS Transport then
-        current = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getTransportCoord(address);
-        if (current.size() > 0) {
-            return chooseClosest(current, count);
-        }
-
-        // Finally, try 2GIS Geocoding
-        current = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getGeoCoord(address);
-        if (current.size() > 0) {
-            return chooseClosest(current, count);
-        }
-
-        return Collections.emptyList();
-    }
-
     public void fillDatabase() {
         loadDataFromCrawler(new VKCrawler());
         loadDataFromCrawler(new GISCrawler());
@@ -54,9 +33,9 @@ public class SearchEngineService {
         db.dropCollection(collection);
     }
 
-    private List<Venue> chooseClosest(List<PlaceCoordinates> current, int count) {
-        final double lat = current.get(0).getLat();
-        final double lng = current.get(0).getLng();
+    public List<Venue> getClosest(PlaceCoordinates current, int count) {
+        final double lat = current.getLat();
+        final double lng = current.getLng();
         final Comparator<Venue> byDistance = (placeOne, placeTwo) ->
                 placeOne.getCoordinates().getDistance(lat, lng).compareTo(placeTwo.getCoordinates().getDistance(lat, lng));
         return db.getVenues()

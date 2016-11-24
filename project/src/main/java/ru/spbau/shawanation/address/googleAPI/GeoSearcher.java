@@ -20,7 +20,17 @@ public class GeoSearcher {
 
     public static Optional<PlaceCoordinates> getLocalCityCoordinates(String location) {
         List<PlaceCoordinates> coordinates = getCityCoordinates(CITY + location);
-        // filtering for Saint Petersburg
+        if (!coordinates.isEmpty()) {
+            return Optional.of(coordinates.get(0));
+        }
+        // Try 2GIS Transport
+        coordinates = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getTransportCoord(location);
+        if (!coordinates.isEmpty()) {
+            return Optional.of(coordinates.get(0));
+        }
+        // Finally, try 2GIS Geocoding
+        coordinates = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getGeoCoord(location);
+
         return coordinates.isEmpty() ? Optional.empty() : Optional.of(coordinates.get(0));
     }
 
