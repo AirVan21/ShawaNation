@@ -24,4 +24,28 @@ public class ProcessedPost {
         this.translatedText = translatedText;
         this.coordinates = coordinates;
     }
+
+    public double getOriginalMark() {
+        return originalMark;
+    }
+
+    public void setOriginalMark(double originalMark) {
+        this.originalMark = originalMark;
+    }
+
+    public double getSentimentMark() {
+        return sentimentMark;
+    }
+
+    public void setSentimentMark(double sentimentMark) {
+        this.sentimentMark = sentimentMark;
+    }
+
+    public double getMixedMark() {
+        return mixedMark;
+    }
+
+    public void setMixedMark(double mixedMark) {
+        this.mixedMark = mixedMark;
+    }
 }
