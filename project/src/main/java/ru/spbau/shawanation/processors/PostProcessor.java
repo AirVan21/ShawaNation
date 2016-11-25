@@ -1,7 +1,6 @@
 package ru.spbau.shawanation.processors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.spbau.shawanation.Application;
+
 import ru.spbau.shawanation.address.googleAPI.GeoSearcher;
 import ru.spbau.shawanation.address.utils.PatternSearcher;
 import ru.spbau.shawanation.database.DataBase;
@@ -22,9 +21,15 @@ import java.util.stream.Collectors;
  */
 public class PostProcessor {
     private final DataBase db = new DataBase("Posts", "localhost");
+    private final static String DEFAULT_ADDRESS = "St Petersburg, Russia";
     private final LocationRecognizer recognizer = new LocationRecognizer();
 
     public PostProcessor() throws IOException, ClassNotFoundException {}
+
+    public List<ProcessedPost> processGISPosts() {
+        final List<ProcessedPost> gisPosts = new ArrayList<>();
+        return gisPosts;
+    }
 
     public List<ProcessedPost> processVKPosts() throws IOException, ClassNotFoundException {
         final List<ProcessedPost> vkPosts = new ArrayList<>();
@@ -33,19 +38,16 @@ public class PostProcessor {
                 .filter(item -> !IsAdvert(item.getText()))
                 .collect(Collectors.toList());
         for (Post post : rawPosts) {
+            final String rawText = post.getText();
             final String translatedText = TextTranslator.translate(post.getText());
-            Optional<String> location = PatternSearcher.getLocationFromText(post.getText());
-            if (!location.isPresent()) {
-                List<String> locations = recognizer.getLocations(translatedText);
-                if (locations.isEmpty()) continue; // NEXT ITERATION
-                location = Optional.of(locations.get(0));
-            }
-            Optional<PlaceCoordinates> coordinates = GeoSearcher.getLocalCityCoordinates(location.get());
+            final Optional<PlaceCoordinates> coordinates = processLocation(rawText, translatedText);
             if (!coordinates.isPresent()) continue; // NEXT ITERATION
-            ProcessedPost processedPost = new ProcessedPost(post.getText(), translatedText, coordinates.get());
-            processedPost.setOriginalMark(post.getMark());
 
-            db.addProcessedPost(processedPost);
+            // Fill ProcessedPost object
+            final ProcessedPost processedPost = new ProcessedPost(post.getText(), translatedText, coordinates.get());
+            processedPost.setOriginalMark(post.getMark());
+            // Store ProcessedPost object
+            vkPosts.add(processedPost);
         }
 
         return vkPosts;
@@ -58,5 +60,27 @@ public class PostProcessor {
         final String searchText = text.toLowerCase();
 
         return searchText.contains(OFFTOP) || searchText.contains(ADVERT) || searchText.contains(DRAWING);
+    }
+
+    private Optional<PlaceCoordinates> processLocation(String text, String translatedText) {
+        Optional<String> location = PatternSearcher.getLocationFromText(text);
+        // Retrieve location from post text
+        if (!location.isPresent()) {
+            final List<String> textLocations = recognizer.getLocations(translatedText);
+            location = textLocations.isEmpty() ? Optional.empty() : Optional.of(textLocations.get(0));
+        }
+
+        if (!location.isPresent()) {
+            // Return Empty Coordinates
+            return Optional.empty();
+        }
+
+        final Optional<PlaceCoordinates> coordinates = GeoSearcher.getLocalCityCoordinates(location.get());
+        if (!coordinates.isPresent() || coordinates.get().getFormattedAddress().equals(DEFAULT_ADDRESS)) {
+            // Handle unsuccessful coordinates search
+            return Optional.empty();
+        }
+
+        return coordinates;
     }
 }
