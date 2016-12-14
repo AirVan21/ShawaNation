@@ -1,6 +1,7 @@
 package ru.spbau.shawanation.database;
 
 import com.mongodb.MongoClient;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,5 +93,9 @@ public class DataBase {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    public ProcessedPost getByID(String mongoID) {
+        return datastore.get(ProcessedPost.class, new ObjectId(mongoID));
     }
 }

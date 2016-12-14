@@ -16,6 +16,10 @@ public class Post {
         SQUARE
     }
 
+    public void setPostId(ObjectId postId) {
+        this.postId = postId;
+    }
+
     @Id
     private ObjectId postId;
     private String text = "";

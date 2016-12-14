@@ -5,10 +5,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.spbau.shawanation.address.googleAPI.GeoSearcher;
 import ru.spbau.shawanation.correction.Corrector;
 import ru.spbau.shawanation.database.PlaceCoordinates;
+import ru.spbau.shawanation.database.Post;
 import ru.spbau.shawanation.database.ProcessedPost;
 import ru.spbau.shawanation.database.Venue;
+import ru.spbau.shawanation.services.ElasticService;
 import ru.spbau.shawanation.services.SearchEngineService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +21,28 @@ public class SearchEngineController {
 
     @Autowired
     private SearchEngineService searchEngineService;
+
+    @Autowired
+    private ElasticService elasticService;
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/full_text", method = RequestMethod.GET)
+    @ResponseBody
+    String queryFullText(@RequestParam(value = "query") String query) {
+        List<Post> posts;
+        try {
+            posts = elasticService.queryFullText(query);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Internal error: " + e.getMessage();
+        }
+
+        List<ProcessedPost> processedPosts = posts
+                .stream()
+                .map(it -> new ProcessedPost(it.getText(), "", it.getCoordinates()))
+                .collect(Collectors.toList());
+        return getPostHtml(processedPosts);
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/query", method = RequestMethod.GET)

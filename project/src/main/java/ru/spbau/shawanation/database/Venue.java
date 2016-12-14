@@ -53,4 +53,19 @@ public class Venue {
     public double getAverageMark() {
         return averageMark;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Venue venue = (Venue) o;
+
+        return coordinates != null ? coordinates.equals(venue.coordinates) : venue.coordinates == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return coordinates != null ? coordinates.hashCode() : 0;
+    }
 }

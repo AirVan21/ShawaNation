@@ -3,7 +3,6 @@ package ru.spbau.shawanation.services;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.spbau.shawanation.address.googleAPI.GeoSearcher;
 import ru.spbau.shawanation.crawler.Crawler;
 import ru.spbau.shawanation.crawler.FoursquareCrawler;
 import ru.spbau.shawanation.crawler.GISCrawler;
