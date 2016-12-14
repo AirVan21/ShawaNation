@@ -8,10 +8,7 @@ import ru.spbau.shawanation.crawler.Crawler;
 import ru.spbau.shawanation.crawler.FoursquareCrawler;
 import ru.spbau.shawanation.crawler.GISCrawler;
 import ru.spbau.shawanation.crawler.VKCrawler;
-import ru.spbau.shawanation.database.DataBase;
-import ru.spbau.shawanation.database.PlaceCoordinates;
-import ru.spbau.shawanation.database.Post;
-import ru.spbau.shawanation.database.Venue;
+import ru.spbau.shawanation.database.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,47 +18,39 @@ public class SearchEngineService {
     @Autowired
     private DataBase db;
 
-    public List<PlaceCoordinates> getClosest(String address, int count) {
-        final List<PlaceCoordinates> current = GeoSearcher.getCityCoordinates(address);
-        if (current.isEmpty()) {
-            return new ArrayList<>();
-        }
+    public void fillDatabase() {
+        loadDataFromCrawler(new VKCrawler());
+        loadDataFromCrawler(new GISCrawler());
+        loadDataFromCrawler(new FoursquareCrawler());
+    }
 
-        final double lat = current.get(0).getLat();
-        final double lng = current.get(0).getLng();
-        final Comparator<PlaceCoordinates> byDistance = (placeOne, placeTwo) ->
-                placeOne.getDistance(lat, lng).compareTo(placeTwo.getDistance(lat, lng));
+    public void storeVenues() {
+        final List<Venue> venues = buildVenues();
+        venues.forEach(venue -> db.addVenue(venue));
+    }
 
+    public void dropCollection(Class collection) {
+        db.dropCollection(collection);
+    }
+
+    public List<Venue> getClosest(PlaceCoordinates current, int count) {
+        final double lat = current.getLat();
+        final double lng = current.getLng();
+        final Comparator<Venue> byDistance = (placeOne, placeTwo) ->
+                placeOne.getCoordinates().getDistance(lat, lng).compareTo(placeTwo.getCoordinates().getDistance(lat, lng));
         return db.getVenues()
                 .stream()
-                .map(Venue::getCoordinates)
-                .distinct()
                 .sorted(byDistance)
                 .limit(count)
                 .collect(Collectors.toList());
     }
 
-    public void fillDatabase() {
-        db.dropDatabase();
-
-        loadDataFromCrawler(new VKCrawler());
-        loadDataFromCrawler(new GISCrawler());
-        // Should be filtered
-//        loadDataFromCrawler(new FoursquareCrawler());
-    }
-
-    public void storeVenues() {
-        db.dropCollection(Venue.class);
-        final List<Venue> venues = buildVenues();
-        venues.forEach(venue -> db.addVenue(venue));
-    }
-
     private List<Venue> buildVenues() {
-        List<Post> posts = db.getPosts();
+        List<ProcessedPost> posts = db.getProcessedPosts();
         Set<ObjectId> usedPosts = new HashSet<>();
         List<Venue> venues = new ArrayList<>();
 
-        for (Post post : posts) {
+        for (ProcessedPost post : posts) {
             if (usedPosts.contains(post.getPostId())) {
                 continue;
             }
@@ -71,7 +60,7 @@ public class SearchEngineService {
             posts
                     .stream()
                     .filter(item -> !usedPosts.contains(item.getPostId()))
-                    .filter(item -> item.isRelated(post))
+                    .filter (item -> AreClose(venue.getCoordinates(), item.getCoordinates()))
                     .forEach(item -> {
                             usedPosts.add(item.getPostId());
                             venue.addPost(item);
@@ -82,13 +71,13 @@ public class SearchEngineService {
         return venues;
     }
 
+    private boolean AreClose(PlaceCoordinates left, PlaceCoordinates right) {
+        final double distance = 30;
+        return left.getDistance(right.getLat(), right.getLng()) < distance;
+    }
+
     private void loadDataFromCrawler(Crawler crawler) {
         final List<Post> posts = crawler.getPosts();
         posts.forEach(db::addPost);
-    }
-
-    public void showVenues() {
-        List<Venue> venues = db.getVenues();
-        venues.forEach(venue -> System.out.println(venue.getCoordinates()));
     }
 }

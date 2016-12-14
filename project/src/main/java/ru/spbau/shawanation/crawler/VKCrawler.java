@@ -53,10 +53,13 @@ public class VKCrawler implements Crawler {
                 for (WallpostFull post : getResponse.getItems()) {
                     final String text = post.getText();
                     final Optional<Double> mark = getMark(text);
-                    final Optional<PlaceCoordinates> coordinates = getPlaceCoordinates(text);
-                    if (mark.isPresent() && coordinates.isPresent()) {
-                        result.add(new Post(text, mark.get(), coordinates.get()));
+                    Post vkPost = new Post();
+                    vkPost.setText(text);
+                    vkPost.setType(Post.PostType.VK);
+                    if (mark.isPresent()) {
+                        vkPost.setMark(mark.get());
                     }
+                    result.add(vkPost);
                 }
                 // Next data chunk
                 offset += 100;

@@ -8,6 +8,7 @@ import ru.spbau.shawanation.utils.GoogleAPIKeys;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -15,6 +16,23 @@ import java.util.stream.Collectors;
  */
 public class GeoSearcher {
     private static final GeoApiContext geoContext = new GeoApiContext().setApiKey(GoogleAPIKeys.GEO_API_CODE);
+    private static final String CITY = "Россия Санкт-Петербург ";
+
+    public static Optional<PlaceCoordinates> getLocalCityCoordinates(String location) {
+        List<PlaceCoordinates> coordinates = getCityCoordinates(CITY + location);
+        if (!coordinates.isEmpty()) {
+            return Optional.of(coordinates.get(0));
+        }
+        // Try 2GIS Transport
+        coordinates = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getTransportCoord(location);
+        if (!coordinates.isEmpty()) {
+            return Optional.of(coordinates.get(0));
+        }
+        // Finally, try 2GIS Geocoding
+        coordinates = ru.spbau.shawanation.address.gisAPI.GeoSearcher.getGeoCoord(location);
+
+        return coordinates.isEmpty() ? Optional.empty() : Optional.of(coordinates.get(0));
+    }
 
     public static List<PlaceCoordinates> getCityCoordinates(String location) {
         List<PlaceCoordinates> coordinates = new ArrayList<>();

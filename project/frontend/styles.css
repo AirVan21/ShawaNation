@@ -1,0 +1,20 @@
+.row-eq-height {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display:         flex !important;
+}
+
+#send-query-btn {
+  float: none;
+  vertical-align: middle;
+}
+
+#search-result-panel {
+  margin-top: 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.25) !important;
+}
+ /*
+  * See https://github.com/angular/angular.io/blob/master/public/docs/_examples/styles.css
+  * for the full set of master styles used by the documentation samples
+  */

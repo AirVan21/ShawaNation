@@ -7,8 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.PropertySource;
 import ru.spbau.shawanation.services.SearchEngineService;
 
-import java.util.stream.Collectors;
 
+import java.io.IOException;
 
 /**
  * Main class
@@ -16,21 +16,15 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:application.properties")
 @SpringBootApplication
 public class Application implements CommandLineRunner {
-
     @Autowired
     private SearchEngineService searchEngineService;
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException, ClassNotFoundException {
         if (args.length == 0) {
             System.out.println("Not enough arguments - provide search query, please");
             return;
         }
-
-        searchEngineService.getClosest(args[0], 10).stream()
-                .filter(item -> !item.getFormattedAddress().isEmpty())
-                .map(item -> String.format("%s: %s,%s\n", item.getFormattedAddress(), item.getLat(), item.getLng()))
-                .forEach(System.out::println);
     }
 
     public static void main(String[] args) {

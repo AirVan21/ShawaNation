@@ -29,6 +29,10 @@ public class DataBase {
         }
     }
 
+    public void addProcessedPost(ProcessedPost post) {
+        datastore.save(post);
+    }
+
     public void addVenue(Venue venue) {
         if (venue.isValid()) {
             datastore.save(venue);
@@ -41,12 +45,42 @@ public class DataBase {
                 .asList();
     }
 
+    public List<Post> getVKPosts() {
+        return datastore
+                .find(Post.class)
+                .field("type")
+                .equal(Post.PostType.VK)
+                .asList();
+    }
+
+    public List<Post> getGISPosts() {
+        return datastore
+                .find(Post.class)
+                .field("type")
+                .equal(Post.PostType.GIS)
+                .asList();
+    }
+
+    public List<Post> getSquarePosts() {
+        return datastore
+                .find(Post.class)
+                .field("type")
+                .equal(Post.PostType.SQUARE)
+                .asList();
+    }
+
+    public List<ProcessedPost> getProcessedPosts() {
+        return datastore
+                .find(ProcessedPost.class)
+                .asList();
+    }
+
     public List<Venue> getVenues() {
         return datastore
                 .find(Venue.class)
                 .asList();
     }
-
+    
     public void dropCollection(Class source) {
         datastore.getCollection(source).drop();
     }
