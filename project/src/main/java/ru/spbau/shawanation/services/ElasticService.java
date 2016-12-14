@@ -59,7 +59,11 @@ public class ElasticService {
 
         createIndex();
 
-        List<ProcessedPost> processedPosts = db.getProcessedPosts();
+        List<ProcessedPost> processedPosts = db.getVenues()
+                .stream()
+                .flatMap(it -> it.getPosts().stream())
+                .collect(Collectors.toList());
+
         for (ProcessedPost processedPost : processedPosts) {
             addProcessedPost(processedPost);
         }

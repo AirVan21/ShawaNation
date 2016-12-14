@@ -81,4 +81,20 @@ public class ProcessedPost {
     public void setCoordinates(PlaceCoordinates coordinates) {
         this.coordinates = coordinates;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProcessedPost that = (ProcessedPost) o;
+
+        return postId != null ? postId.equals(that.postId) : that.postId == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return postId != null ? postId.hashCode() : 0;
+    }
 }

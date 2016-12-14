@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-@Service
 public class SentimentService {
     private final Logger logger = Logger.getLogger(SentimentService.class.getName());
 
