@@ -28,16 +28,21 @@ public class SearchEngineController {
         String correctedQuery = corrector.getCorrection(queryText);
         String correctionMessage = "";
         if (correctedQuery == null) {
-            return "<h3> Ваш запрос не  дал результатов! </h3>";
+            return "<h3> Запрос сформулирован некорректно! </h3>";
         }
         if (!correctedQuery.equals(queryText)) {
-            correctionMessage = "<h3> Может вы искали: '" + correctedQuery + "'</h3>";
+            correctionMessage = "<h3> Мы считаем, что вы искали: '" + correctedQuery + "'</h3>";
         }
 
         Optional<PlaceCoordinates> coordinates = GeoSearcher.getLocalCityCoordinates(queryText);
-        String output = coordinates.isPresent()
-                ? getDistanceQueryDescription(coordinates.get()) + getDistanceQueryResult(coordinates.get())
-                : getMarkQueryResult(queryText);
+        String output = "";
+        if (coordinates.isPresent()) {
+            output = isSaintPetersburg(coordinates.get())
+                    ? getDistanceQueryDescription(coordinates.get()) + getDistanceQueryResult(coordinates.get())
+                    : "<h3> Так как это сервис по поиску шавермы в Санкт-Петербурге, то мы не можем вам что-то посоветовать ;( </h3>";
+        } else {
+            output = getMarkQueryResult(queryText);
+        }
 
         return correctionMessage + output;
     }
@@ -103,5 +108,13 @@ public class SearchEngineController {
     private Double getMarkScore(double score) {
         final int max = 10;
         return (Math.abs(max - score) / max) * 0.5;
+    }
+
+    private boolean isSaintPetersburg(PlaceCoordinates place) {
+        String address = place.getFormattedAddress().toLowerCase();
+        String matchFirst = "Peterburg".toLowerCase();
+        String matchSecond = "Petersburg".toLowerCase();
+
+        return address.contains(matchFirst) || address.contains(matchSecond);
     }
 }
