@@ -9,6 +9,7 @@ import ru.spbau.shawanation.database.ProcessedPost;
 import ru.spbau.shawanation.database.Venue;
 import ru.spbau.shawanation.services.SearchEngineService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +43,8 @@ public class SearchEngineController {
     }
 
     private String getDistanceQueryResult(PlaceCoordinates placeCoordinates) {
-        List<Venue> coordinates = searchEngineService.getClosest(placeCoordinates, 10);
+        List<Venue> coordinates = searchEngineService.getClosest(placeCoordinates, 30);
+        coordinates = sortByParameters(coordinates, placeCoordinates);
         String output = coordinates.stream()
                 .map(c -> String.format("<h3> %s </h3> <b> Distance = %s </b> (%s, %s) <br> Mark = %s <br> %s ",
                         c.getCoordinates().getFormattedAddress(),
@@ -73,5 +75,33 @@ public class SearchEngineController {
                 .stream()
                 .map(post -> String.format("<p> <b> Отзыв: </b> %s </p>", post.getText()))
                 .collect(Collectors.joining());
+    }
+
+    private List<Venue> sortByParameters(List<Venue> venues, PlaceCoordinates coordinates) {
+        if (venues.isEmpty()) {
+            return venues;
+        }
+
+        double maxDist = venues.get(venues.size() - 1).getCoordinates().getDistance(coordinates.getLat(), coordinates.getLng());
+        final Comparator<Venue> byDistanceAndMark = (placeOne, placeTwo) -> {
+            Double firstScore = getDistanceScore(placeOne.getCoordinates(), coordinates, maxDist) + getMarkScore(placeOne.getAverageMark());
+            Double secondScore = getDistanceScore(placeTwo.getCoordinates(), coordinates, maxDist) + getMarkScore(placeTwo.getAverageMark());
+            return firstScore.compareTo(secondScore);
+        };
+        venues.sort(byDistanceAndMark);
+
+        return venues;
+    }
+
+    private Double getDistanceScore(PlaceCoordinates input, PlaceCoordinates item, double maximum) {
+        double lat = input.getLat();
+        double lng = input.getLng();
+
+        return (item.getDistance(lat, lng) / maximum) * 0.5;
+    }
+
+    private Double getMarkScore(double score) {
+        final int max = 10;
+        return (Math.abs(max - score) / max) * 0.5;
     }
 }
