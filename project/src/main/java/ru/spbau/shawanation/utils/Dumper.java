@@ -3,38 +3,39 @@ package ru.spbau.shawanation.utils;
 
 import ru.spbau.shawanation.database.DataBase;
 import ru.spbau.shawanation.database.ProcessedPost;
+import ru.spbau.shawanation.database.Venue;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Dumper {
     private final DataBase db = new DataBase("Posts", "localhost");
 
     public void createDumpFile() throws FileNotFoundException, UnsupportedEncodingException {
-        final List<ProcessedPost> posts = db.getProcessedPosts();
-        final PrintWriter writer = new PrintWriter("dump.txt", "UTF-8");
-        for (ProcessedPost post : posts) {
-            if (post.getOriginalMark() > 0) {
-                writer.print(post.getOriginalMark());
-                writer.print(";");
-                writer.print("\"");
-                String text = post.getTranslatedText();
-                int indexAdddress = text.indexOf("ADDRESS");
-                if (indexAdddress > 0) {
-                    text = text.substring(indexAdddress);
+        final List<Venue> venues = db.getVenues();
+        final PrintWriter writer = new PrintWriter("dump_all.txt", "UTF-8");
+        ArrayList<Integer> markedCountByVenue = new ArrayList<>();
+        ArrayList<Integer> unmarkedCountByVenue = new ArrayList<>();
+
+        for (Venue venue: venues) {
+            int markedCount = 0;
+            int unmarkedCount = 0;
+            for (ProcessedPost post : venue.getPosts()) {
+                double mark = post.getOriginalMark();
+                if (Double.toString((mark)).length() > 5) {
+                    unmarkedCount++;
+                } else {
+                    markedCount++;
                 }
-                int index = text.indexOf("\\n\\n");
-                if (index > 0) {
-                    text = text.substring(index);
-                }
-                text = text.replace("\\n", " ")
-                        .replace(";", " ")
-                        .replace("\"", " ");
-                writer.print(text);
-                writer.println("\"");
             }
+            markedCountByVenue.add(markedCount);
+            unmarkedCountByVenue.add(unmarkedCount);
+        }
+        for (int i = 0; i < venues.size(); i++) {
+            writer.write(String.format("%d, %d\n", markedCountByVenue.get(i), unmarkedCountByVenue.get(i)));
         }
         writer.close();
     }

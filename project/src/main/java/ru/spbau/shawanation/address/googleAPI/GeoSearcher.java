@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
  */
 public class GeoSearcher {
     private static final GeoApiContext geoContext = new GeoApiContext().setApiKey(GoogleAPIKeys.GEO_API_CODE);
-    private static final String CITY = "Россия Санкт-Петербург ";
+    private static final String CITY = " , Санкт-Петербург";
 
     public static Optional<PlaceCoordinates> getLocalCityCoordinates(String location) {
-        List<PlaceCoordinates> coordinates = getCityCoordinates(CITY + location);
+        List<PlaceCoordinates> coordinates = getCityCoordinates(location + CITY);
         if (!coordinates.isEmpty()) {
             return Optional.of(coordinates.get(0));
         }

@@ -8,6 +8,7 @@ import ru.spbau.shawanation.database.PlaceCoordinates;
 import ru.spbau.shawanation.database.Post;
 import ru.spbau.shawanation.database.ProcessedPost;
 import ru.spbau.shawanation.ner.LocationRecognizer;
+import ru.spbau.shawanation.services.SentimentService;
 import ru.spbau.shawanation.utils.TextTranslator;
 
 import java.io.IOException;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
  * PostProcessor class is a class for processing raw post
  */
 public class PostProcessor {
+
+    private SentimentService sentimentService = new SentimentService();
+
     private final DataBase db = new DataBase("Posts", "localhost");
     private final static String DEFAULT_ADDRESS = "St Petersburg, Russia";
     private final LocationRecognizer recognizer = new LocationRecognizer();
@@ -52,6 +56,16 @@ public class PostProcessor {
         }
 
         return vkPosts;
+    }
+
+    public void recalcPostsSentiment() {
+        List<ProcessedPost> processedPosts = db.getProcessedPosts();
+        for (ProcessedPost post : processedPosts) {
+            if (Math.abs(post.getOriginalMark()) < 1e-10) {
+                double sentimentMark = sentimentService.calcSentiment(post.getTranslatedText()) * 10;
+                db.updateProcessedPostMark(post, sentimentMark);
+            }
+        }
     }
 
     private boolean IsAdvert(String text) {
