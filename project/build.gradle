@@ -80,6 +80,9 @@ dependencies {
     // Streamex. Because we like streams!
     compile group: 'io.github.amaembo', name: 'streamex', version: '0.4.1'
     compile 'org.springframework:spring-context:4.3.3.RELEASE'
+    // https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '5.1.1'
+
 }
 
 springBoot {
