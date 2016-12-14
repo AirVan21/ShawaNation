@@ -3,6 +3,7 @@ package ru.spbau.shawanation.database;
 import com.mongodb.MongoClient;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.UpdateOperations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -31,6 +32,13 @@ public class DataBase {
 
     public void addProcessedPost(ProcessedPost post) {
         datastore.save(post);
+    }
+
+    public void updateProcessedPostMark(ProcessedPost post, double mark) {
+        UpdateOperations<ProcessedPost> update = datastore
+                .createUpdateOperations(ProcessedPost.class)
+                .set("originalMark", mark);
+        datastore.update(post, update);
     }
 
     public void addVenue(Venue venue) {

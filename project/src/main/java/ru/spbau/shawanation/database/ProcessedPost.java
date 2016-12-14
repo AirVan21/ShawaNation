@@ -81,10 +81,4 @@ public class ProcessedPost {
     public void setCoordinates(PlaceCoordinates coordinates) {
         this.coordinates = coordinates;
     }
-
-    public void calculateMixedMark() {
-        mixedMark = originalMark <= 0
-                ? sentimentMark
-                : (sentimentMark + originalMark)  / 2;
-    }
 }
