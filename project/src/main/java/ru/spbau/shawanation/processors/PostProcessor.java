@@ -28,6 +28,7 @@ public class PostProcessor {
 
     public List<ProcessedPost> processGISPosts() {
         final List<ProcessedPost> gisPosts = new ArrayList<>();
+        final List<Post> rawPost = db.getGISPosts();
         return gisPosts;
     }
 
